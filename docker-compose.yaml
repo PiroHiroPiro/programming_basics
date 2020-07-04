@@ -1,0 +1,10 @@
+version: "3"
+
+services:
+  ocaml:
+    image: ocaml/opam2
+    container_name: ocaml_container
+    tty: true
+    volumes:
+      - ./source:/usr/src/source
+    working_dir: /usr/src/source

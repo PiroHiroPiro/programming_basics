@@ -12,19 +12,19 @@ A repository for learning the book "プログラミングの基礎".
 Run shell:
 
 ```console
-> docker-compose run ocaml bash
+$ docker-compose run ocaml bash
 ```
 
 Run file:
 
 ```console
-> docker-compose run ocaml ocaml uitls/sample.ml
+$ docker-compose run ocaml ocaml uitls/sample.ml
 ```
 
 Run interactive console:
 
 ```console
-> docker-compose run ocaml ocaml
+$ docker-compose run ocaml ocaml
 ```
 
 ## Install

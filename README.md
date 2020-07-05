@@ -27,6 +27,8 @@ Run interactive console:
 $ docker-compose run ocaml ocaml
 ```
 
+Exit interactive console: `exit 0;;` or `#quit;;`.
+
 ## Install
 
 Clone repository:

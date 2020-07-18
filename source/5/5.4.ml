@@ -1,4 +1,4 @@
-(* 目的：a * x ^ 2 + b * x + c = 0 が与えられたとき、判別式を求める *)
+(* 目的：二次方程式 a * x ^ 2 + b * x + c = 0 が与えられたとき、判別式を求める *)
 (* hanbetsushiki : int -> int -> int -> int *)
 let hanbetsushiki a b c = (b * b) - 4 * a * c
 

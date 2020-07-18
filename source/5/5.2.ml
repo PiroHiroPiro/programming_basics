@@ -1,4 +1,4 @@
-(* 目的：時間 time が午前か午後か判断する *)
+(* 目的：時間が午前か午後か判断する *)
 (* jikan : int -> string *)
 let jikan time = if time < 12 then "午前" else "午後"
 

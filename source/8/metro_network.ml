@@ -19,3 +19,13 @@ let ekimei3 = {kanji_name="東京" ; hiragana_name="とうきょう" ; romaji_na
 let test1 = hyoji ekimei1 = "丸ノ内線、茗荷谷（みょうがだに）"
 let test2 = hyoji ekimei2 = "山の手線、新宿（しんじゅく）"
 let test3 = hyoji ekimei3 = "山の手線、東京（とうきょう）"
+
+
+(* 駅と駅の接続情報（漢字の駅名、ひらがなの駅名、ローマ字の駅名、路線名）を表す型 *)
+type ekimei_t = {
+  kiten: string ; (* 起点の駅名 *)
+  shuten: string ; (* 終点の駅名 *)
+  keiyu: string ; (* 経由する路線名 *)
+  kyori: float ; (* 距離（km） *)
+  jikan: int ; (* 所要時間（分） *)
+}

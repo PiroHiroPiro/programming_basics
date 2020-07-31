@@ -1,4 +1,4 @@
-(* 目的：国語、数学、英語、理科、社会の 5 今日かの点数の合計と平均を返す *)
+(* 目的：国語、数学、英語、理科、社会の 5 教科の点数の合計と平均を返す *)
 (* goukei_to_heikin : float -> float -> float -> float -> float -> float * float  *)
 let goukei_to_heikin kokugo sugaku eigo rika shakai =
   (

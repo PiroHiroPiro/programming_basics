@@ -1,4 +1,4 @@
-(* 目的：整数リストを受け取り、偶数の要素のみを含むリストを返す *)
+(* 目的：整数のリストを受け取り、偶数の要素のみを含むリストを返す *)
 (* even int list -> int list *)
 let rec even lst = match lst with
     [] -> []

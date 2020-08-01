@@ -7,11 +7,14 @@ type person_t = {
   bloodtype: string;
 }
 
-(* person_t list は
+(*
+  person_t list は
     - []            空リスト、あるいは
     - first :: rest 最初の要素が first で残りのリストが rest（first は person_t 型、rest が自己参照のケース）
-  という形 *)
+  という形
+*)
 
+(* person_t list 型のデータ例 *)
 let person1 = {name="たかし"; height_meter=1.65; weight_kg=55.; birthday=(8, 25); bloodtype="A";}
 let person2 = {name="えみ"; height_meter=1.42; weight_kg=50.1; birthday=(10, 21); bloodtype="O";}
 let person3 = {name="とおる"; height_meter=1.85; weight_kg=69.3; birthday=(1, 6); bloodtype="B";}
@@ -53,8 +56,8 @@ let seiza month day =
 (* otomeza : person_t list -> string list *)
 let rec otomeza lst = match lst with
     [] -> []
-  | {name=n; height_meter=h; weight_kg=w; birthday=(month, day); bloodtype=bt} :: rest
-    -> if seiza month day = "乙女座" then n :: otomeza rest else otomeza rest
+  | {name=n; height_meter=h; weight_kg=w; birthday=(m, d); bloodtype=b} :: rest
+    -> if seiza m d = "乙女座" then n :: otomeza rest else otomeza rest
 
 (* テスト *)
 let test1 = otomeza persons1 = ["たかし"]

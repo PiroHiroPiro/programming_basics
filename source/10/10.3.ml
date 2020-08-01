@@ -27,7 +27,7 @@ let rec gakusei_insert lst gakusei = match gakusei with {namae=n; tensuu=t; seis
   | ({namae=fn; tensuu=ft; seiseki=fs} as first) :: rest -> if ft < t then gakusei :: lst else first :: gakusei_insert rest gakusei
 
 (* 目的：学生のリストを受け取り、点数で降順に整列した学生のリストを返す *)
-(* gakusei_ins_sort : gakusei_t list -> gakusei_t list *)
+(* gakusei_sort : gakusei_t list -> gakusei_t list *)
 let rec gakusei_sort lst = match lst with
     [] -> []
   | first :: rest -> gakusei_insert (gakusei_sort rest) first

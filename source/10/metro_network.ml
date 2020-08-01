@@ -373,3 +373,14 @@ let rec romaji_to_kanji romaji_ekimei ekimei_list = match ekimei_list with
 
 (* テスト *)
 let test1 = romaji_to_kanji "myogadani" global_ekimei_list = "茗荷谷"
+
+(* 目的：二つの駅名と駅間リストを受け取り、距離を返す *)
+(* get_ekikan_kyori : string -> string -> ekikan_t list -> float *)
+let rec get_ekikan_kyori eki1 eki2 ekikan_list = match ekikan_list with
+    [] -> infinity
+  | {kiten=kiten; shuten=shuten; keiyu=keiyu; kyori=kyori; jikan=jikan} :: rest ->
+    if (kiten = eki1 && shuten = eki2) || (kiten = eki2 && shuten = eki1) then kyori
+    else get_ekikan_kyori eki1 eki2 rest
+
+(* テスト *)
+let test2 = get_ekikan_kyori "茗荷谷" "新大塚" global_ekikan_list = 1.2

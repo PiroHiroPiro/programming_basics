@@ -37,7 +37,7 @@ exception List_ga_kara
 
 (* 目的：学生のリストを受け取り、点数が最も高い学生を返す *)
 (* gakusei_max : gakusei_t list -> gakusei_t *)
-let rec gakusei_max lst = match gakusei_sort lst with
+let gakusei_max lst = match gakusei_sort lst with
     [] -> raise List_ga_kara
   | first :: rest -> first
 

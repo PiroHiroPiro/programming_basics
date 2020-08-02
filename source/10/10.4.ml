@@ -14,12 +14,10 @@ type person_t = {
   という形
 *)
 
-(* person_t list 型のデータ例 *)
-let person1 = {name="たかし"; height_meter=1.65; weight_kg=55.; birthday=(8, 25); bloodtype="A";}
-let person2 = {name="えみ"; height_meter=1.42; weight_kg=50.1; birthday=(10, 21); bloodtype="O";}
-let person3 = {name="とおる"; height_meter=1.85; weight_kg=69.3; birthday=(1, 6); bloodtype="B";}
-
-let persons1 = [person1; person2; person3];;
+(* person_t 型のデータ例 *)
+let person_2 = {name="たかし"; height_meter=1.65; weight_kg=55.; birthday=(8, 25); bloodtype="A";}
+let person_1 = {name="えみ"; height_meter=1.42; weight_kg=50.1; birthday=(10, 21); bloodtype="O";}
+let person_3 = {name="とおる"; height_meter=1.85; weight_kg=69.3; birthday=(1, 6); bloodtype="B";}
 
 (* 目的：名前順で整列した人のリストと人を受け取り、名前順に適切な位置の挿入した人のリストを返す *)
 (* person_insert : person_t list -> person_t -> person_t list *)
@@ -34,4 +32,4 @@ let rec person_sort lst = match lst with
   | first :: rest -> person_insert (person_sort rest) first
 
 (* テスト *)
-let test1 = person_sort persons1 = [person2; person1; person3];;
+let test1 = person_sort [person_3; person_2; person_1] = [person_1; person_2; person_3];;

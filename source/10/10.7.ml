@@ -14,12 +14,10 @@ type person_t = {
   という形
 *)
 
-(* person_t list 型のデータ例 *)
-let person1 = {name="たかし"; height_meter=1.65; weight_kg=55.; birthday=(8, 25); bloodtype="A";}
-let person2 = {name="えみ"; height_meter=1.42; weight_kg=50.1; birthday=(10, 21); bloodtype="O";}
-let person3 = {name="とおる"; height_meter=1.85; weight_kg=69.3; birthday=(1, 6); bloodtype="B";}
-
-let persons1 = [person1; person2; person3];;
+(* person_t 型のデータ例 *)
+let person_A = {name="たかし"; height_meter=1.65; weight_kg=55.; birthday=(8, 25); bloodtype="A";}
+let person_O = {name="えみ"; height_meter=1.42; weight_kg=50.1; birthday=(10, 21); bloodtype="O";}
+let person_B = {name="とおる"; height_meter=1.85; weight_kg=69.3; birthday=(1, 6); bloodtype="B";}
 
 (* 目的：人のリストを受け取り、各血液型の人数を集計(A, B, O, AB)して返す *)
 (* ketueki_shukei : person_t list -> int * int * int * int *)
@@ -34,4 +32,4 @@ let rec ketueki_shukei lst = match lst with
     else  (a, b, o, ab + 1)
 
 (* テスト *)
-let test1 = ketueki_shukei persons1 = (1, 1, 1, 0)
+let test1 = ketueki_shukei [person_A; person_O; person_B] = (1, 1, 1, 0)

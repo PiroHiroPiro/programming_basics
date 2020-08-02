@@ -12,13 +12,10 @@ type gakusei_t = {
   という形
 *)
 
-(* gakusei_t list 型のデータ例 *)
-let gakusei1 = {namae="たかし"; tensuu=99; seiseki="A";}
-let gakusei2 = {namae="えみ"; tensuu=43; seiseki="F";}
-let gakusei3 = {namae="とおる"; tensuu=82; seiseki="B";}
-
-let gakusei_lst1 = [gakusei1; gakusei2; gakusei3];;
-
+(* gakusei_t 型のデータ例 *)
+let gakusei_99 = {namae="たかし"; tensuu=99; seiseki="A";}
+let gakusei_43 = {namae="えみ"; tensuu=43; seiseki="F";}
+let gakusei_82 = {namae="とおる"; tensuu=82; seiseki="B";}
 
 (* 目的：降順に並んでいる学生のリストと学生を受け取り、点数が降順となる位置に挿入した学生のリストを返す *)
 (* gakusei_insert : gakusei_t list -> gakusei_t -> gakusei_t list *)
@@ -33,4 +30,4 @@ let rec gakusei_sort lst = match lst with
   | first :: rest -> gakusei_insert (gakusei_sort rest) first
 
 (* テスト *)
-let test1 = gakusei_sort gakusei_lst1 = [gakusei1; gakusei3; gakusei2]
+let test1 = gakusei_sort [gakusei_99; gakusei_43; gakusei_82] = [gakusei_99; gakusei_82; gakusei_43]

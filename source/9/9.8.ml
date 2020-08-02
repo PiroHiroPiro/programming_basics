@@ -14,14 +14,10 @@ type person_t = {
   という形
 *)
 
-(* person_t list 型のデータ例 *)
-let person1 = {name="たかし"; height_meter=1.65; weight_kg=55.; birthday=(8, 25); bloodtype="A";}
-let person2 = {name="えみ"; height_meter=1.42; weight_kg=50.1; birthday=(10, 21); bloodtype="O";}
-let person3 = {name="とおる"; height_meter=1.85; weight_kg=69.3; birthday=(1, 6); bloodtype="B";}
-
-let persons1 = [person1; person2; person3];;
-let persons2 = [person1; person2; person1];;
-let persons3 = [person3; person2; person2];;
+(* person_t 型のデータ例 *)
+let person_otome = {name="たかし"; height_meter=1.65; weight_kg=55.; birthday=(8, 25); bloodtype="A";}
+let person_tenbin = {name="えみ"; height_meter=1.42; weight_kg=50.1; birthday=(10, 21); bloodtype="O";}
+let person_yagi = {name="とおる"; height_meter=1.85; weight_kg=69.3; birthday=(1, 6); bloodtype="B";}
 
 (* 目的：月日から星座を求める *)
 (* seiza : int -> int -> string *)
@@ -60,6 +56,6 @@ let rec otomeza lst = match lst with
     -> if seiza m d = "乙女座" then n :: otomeza rest else otomeza rest
 
 (* テスト *)
-let test1 = otomeza persons1 = ["たかし"]
-let test2 = otomeza persons2 = ["たかし"; "たかし"]
-let test3 = otomeza persons3 = []
+let test1 = otomeza [person_otome; person_tenbin; person_yagi] = ["たかし"]
+let test2 = otomeza [person_otome; person_tenbin; person_otome] = ["たかし"; "たかし"]
+let test3 = otomeza [person_tenbin; person_yagi; person_yagi] = []

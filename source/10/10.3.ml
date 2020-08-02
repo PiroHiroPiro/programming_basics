@@ -17,7 +17,7 @@ let gakusei_99 = {namae="たかし"; tensuu=99; seiseki="A";}
 let gakusei_43 = {namae="えみ"; tensuu=43; seiseki="F";}
 let gakusei_82 = {namae="とおる"; tensuu=82; seiseki="B";}
 
-(* 目的：降順に並んでいる学生のリストと学生を受け取り、点数が降順となる位置に挿入した学生のリストを返す *)
+(* 目的：点数が降順に並んでいる学生のリストと学生を受け取り、点数が降順となる位置に挿入した学生のリストを返す *)
 (* gakusei_insert : gakusei_t list -> gakusei_t -> gakusei_t list *)
 let rec gakusei_insert lst gakusei = match gakusei with {namae=n; tensuu=t; seiseki=s} -> match lst with
     [] -> [gakusei]

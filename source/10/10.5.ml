@@ -17,6 +17,7 @@ let gakusei_99 = {namae="たかし"; tensuu=99; seiseki="A";}
 let gakusei_43 = {namae="えみ"; tensuu=43; seiseki="F";}
 let gakusei_82 = {namae="とおる"; tensuu=82; seiseki="B";}
 
+(*
 (* 目的：降順に並んでいる学生のリストと学生を受け取り、点数が降順となる位置に挿入した学生のリストを返す *)
 (* gakusei_insert : gakusei_t list -> gakusei_t -> gakusei_t list *)
 let rec gakusei_insert lst gakusei = match gakusei with {namae=n; tensuu=t; seiseki=s} -> match lst with
@@ -37,6 +38,14 @@ exception List_ga_kara
 let gakusei_max lst = match gakusei_sort lst with
     [] -> raise List_ga_kara
   | first :: rest -> first
+ *)
+
+(* 目的：学生のリストを受け取り、点数が最も高い学生を返す *)
+(* gakusei_max : gakusei_t list -> gakusei_t *)
+let rec gakusei_max lst = match lst with
+    [] -> {namae=""; tensuu=min_int; seiseki=""}
+  | ({namae=fn; tensuu=ft; seiseki=fs} as first) :: rest -> match gakusei_max rest with {namae=n; tensuu=t; seiseki=s} ->
+    if t < ft then first else gakusei_max rest
 
 (* テスト *)
 let test1 = gakusei_max [gakusei_99; gakusei_43; gakusei_82] = gakusei_99

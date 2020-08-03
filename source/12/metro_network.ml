@@ -407,7 +407,7 @@ let test3 = kyori_wo_hyoji "myogadani" "shinotsuka" = "茗荷谷駅から新大�
 let test4 = kyori_wo_hyoji "myogadani" "tameikesanno" = "茗荷谷駅と溜池山王駅はつながっていません"
 let test5 = kyori_wo_hyoji "myogadani" "nagaokakyo" = "nagaokakyoという駅は存在しません"
 
-(* 駅の最短距離を表す型 *)
+(* 駅までの最短距離を記録する型 *)
 type eki_t = {
   namae: string;  (* 漢字 *)
   saitan_kyori: float;
@@ -427,3 +427,10 @@ let test6 = make_eki_list [ekimei_myogadani; ekimei_ikebukuro; ekimei_tokyo]
     {namae="池袋"; saitan_kyori=infinity; temae_list=[]};
     {namae="東京"; saitan_kyori=infinity; temae_list=[]}
   ]
+
+(* 目的：駅までの最短距離を記録する型を受け取り、初期化する *)
+(* shokika : eki_t -> eki_t *)
+let shokika eki = match eki with {namae=namae} -> {namae=namae; saitan_kyori=0.; temae_list=[namae]}
+
+(* テスト *)
+let test7 = shokika {namae="茗荷谷"; saitan_kyori=infinity; temae_list=[]} = {namae="茗荷谷"; saitan_kyori=0.; temae_list=["茗荷谷"]};

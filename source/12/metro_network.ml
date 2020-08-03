@@ -6,19 +6,20 @@ type ekimei_t = {
   shozoku: string; (* 路線名 *)
 }
 
+(* ekimei_t 型のデータ例 *)
+let ekimei_myogadani = {kanji="茗荷谷"; kana="みょうがだに"; romaji="myogadani"; shozoku="丸ノ内線";}
+let ekimei_ikebukuro = {kanji="池袋"; kana="いけぶくろ"; romaji="ikebukuro"; shozoku="丸ノ内線";}
+let ekimei_tokyo = {kanji="東京"; kana="とうきょう"; romaji="tokyo"; shozoku="山の手線";}
+
 (* 目的：駅名のデータを受け取り、駅名を示す文字列を返す *)
 (* hyoji : ekimei_t -> string *)
 let hyoji ekimei = match ekimei with {kanji=kanji; kana=kana; romaji=romaji; shozoku=shozoku;} ->
   shozoku ^ "、" ^ kanji ^ "（" ^ kana ^ "）"
 
 (* テスト *)
-let ekimei1 = {kanji="茗荷谷"; kana="みょうがだに"; romaji="myogadani"; shozoku="丸ノ内線";}
-let ekimei2 = {kanji="新宿"; kana="しんじゅく"; romaji="shinjuku"; shozoku="山の手線";}
-let ekimei3 = {kanji="東京"; kana="とうきょう"; romaji="tokyo"; shozoku="山の手線";}
-let test1 = hyoji ekimei1 = "丸ノ内線、茗荷谷（みょうがだに）"
-let test2 = hyoji ekimei2 = "山の手線、新宿（しんじゅく）"
-let test3 = hyoji ekimei3 = "山の手線、東京（とうきょう）"
-
+let test1 = hyoji ekimei_myogadani = "丸ノ内線、茗荷谷（みょうがだに）"
+let test2 = hyoji ekimei_ikebukuro = "丸ノ内線、池袋（いけぶくろ）"
+let test3 = hyoji ekimei_tokyo = "山の手線、東京（とうきょう）"
 
 (* 駅と駅の接続情報を表す型 *)
 type ekikan_t = {
@@ -369,7 +370,7 @@ let global_ekikan_list = [
 (* romaji_to_kanji : string -> ekimei_t list -> string *)
 let rec romaji_to_kanji romaji_ekimei ekimei_list = match ekimei_list with
     [] -> ""
-  | {kanji=kanji; kana=kana; romaji=romaji; shozoku=shozoku} :: rest -> if romaji_ekimei = romaji then kanji else romaji_to_kanji romaji_ekimei rest
+  | {kanji=kanji; romaji=romaji} :: rest -> if romaji_ekimei = romaji then kanji else romaji_to_kanji romaji_ekimei rest
 
 (* テスト *)
 let test1 = romaji_to_kanji "myogadani" global_ekimei_list = "茗荷谷"
@@ -378,7 +379,7 @@ let test1 = romaji_to_kanji "myogadani" global_ekimei_list = "茗荷谷"
 (* get_ekikan_kyori : string -> string -> ekikan_t list -> float *)
 let rec get_ekikan_kyori eki1 eki2 ekikan_list = match ekikan_list with
     [] -> infinity
-  | {kiten=kiten; shuten=shuten; keiyu=keiyu; kyori=kyori; jikan=jikan} :: rest ->
+  | {kiten=kiten; shuten=shuten; kyori=kyori} :: rest ->
     if (kiten = eki1 && shuten = eki2) || (kiten = eki2 && shuten = eki1) then kyori
     else get_ekikan_kyori eki1 eki2 rest
 
@@ -408,7 +409,21 @@ let test5 = kyori_wo_hyoji "myogadani" "nagaokakyo" = "nagaokakyoという駅は
 
 (* 駅の最短距離を表す型 *)
 type eki_t = {
-  namae: string;
+  namae: string;  (* 漢字 *)
   saitan_kyori: float;
   temae_list: string list;
 }
+
+(* 目的：駅名のリストを受け取り、ダイクストラ法で用いる最短距離リストを作成する *)
+(* make_eki_list : ekimei_t list -> eki_t list *)
+let rec make_eki_list ekimei_list = match ekimei_list with
+    [] -> []
+  | {kanji=namae} :: rest -> {namae=namae; saitan_kyori=infinity; temae_list=[]} :: make_eki_list rest
+
+(* テスト *)
+let test6 = make_eki_list [ekimei_myogadani; ekimei_ikebukuro; ekimei_tokyo]
+  = [
+    {namae="茗荷谷"; saitan_kyori=infinity; temae_list=[]};
+    {namae="池袋"; saitan_kyori=infinity; temae_list=[]};
+    {namae="東京"; saitan_kyori=infinity; temae_list=[]}
+  ]

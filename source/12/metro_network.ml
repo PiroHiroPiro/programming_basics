@@ -10,6 +10,7 @@ type ekimei_t = {
 let ekimei_myogadani = {kanji="茗荷谷"; kana="みょうがだに"; romaji="myogadani"; shozoku="丸ノ内線";}
 let ekimei_ikebukuro = {kanji="池袋"; kana="いけぶくろ"; romaji="ikebukuro"; shozoku="丸ノ内線";}
 let ekimei_tokyo = {kanji="東京"; kana="とうきょう"; romaji="tokyo"; shozoku="山の手線";}
+let ekimei_ikebukuro2 = {kanji="池袋"; kana="いけぶくろ"; romaji="ikebukuro"; shozoku="有楽町線";}
 
 (* 目的：駅名のデータを受け取り、駅名を示す文字列を返す *)
 (* hyoji : ekimei_t -> string *)
@@ -433,4 +434,26 @@ let test6 = make_eki_list [ekimei_myogadani; ekimei_ikebukuro; ekimei_tokyo]
 let shokika eki = match eki with {namae=namae} -> {namae=namae; saitan_kyori=0.; temae_list=[namae]}
 
 (* テスト *)
-let test7 = shokika {namae="茗荷谷"; saitan_kyori=infinity; temae_list=[]} = {namae="茗荷谷"; saitan_kyori=0.; temae_list=["茗荷谷"]};
+let test7 = shokika {namae="茗荷谷"; saitan_kyori=infinity; temae_list=[]} = {namae="茗荷谷"; saitan_kyori=0.; temae_list=["茗荷谷"]}
+
+(* 目的：駅名のひらがな順で整列した駅名のリストと駅名を受け取り、駅のひらがな名順に適切な位置の挿入した人のリストを返す *)
+(* ekimei_insert : ekimei_t list -> ekimei_t -> ekimei_t list *)
+let rec ekimei_insert lst ekimei = match ekimei with {kana=kana} -> match lst with
+    [] -> [ekimei]
+  | ({kana=fkana} as first) :: rest -> if fkana > kana then ekimei :: lst else first :: ekimei_insert rest ekimei
+
+(* 目的：駅名のリストを受け取り、駅のひらがな名順で整列した駅名のリストを返す *)
+(* ekimei_sort : ekimei_t list -> ekimei_t list *)
+let rec ekimei_sort lst = match lst with
+    [] -> []
+  | first :: rest -> ekimei_insert (ekimei_sort rest) first
+
+(* 目的：駅名のリストを受け取り、ひらがなの順に並び替え重複を削除して返す *)
+(* seiretsu : ekimei_t list -> ekimei_t list *)
+let rec seiretsu ekimei_list = match ekimei_sort ekimei_list with
+    [] -> []
+  | first :: [] -> [first]
+  | ({kana=fkana} as first) :: ({kana=skana} as second) :: rest -> if fkana = skana then first :: seiretsu rest else first :: seiretsu (second :: rest)
+
+(* テスト *)
+let test8 = seiretsu [ekimei_ikebukuro2; ekimei_tokyo; ekimei_myogadani; ekimei_ikebukuro] = [ekimei_ikebukuro; ekimei_tokyo; ekimei_myogadani]

@@ -17,7 +17,7 @@ let ekimei_ikebukuro2 = {kanji="池袋"; kana="いけぶくろ"; romaji="ikebuku
 let hyoji ekimei = match ekimei with {kanji=kanji; kana=kana; romaji=romaji; shozoku=shozoku;} ->
   shozoku ^ "、" ^ kanji ^ "（" ^ kana ^ "）"
 
-(* テスト *)
+(* テスト：hyoji *)
 let test1 = hyoji ekimei_myogadani = "丸ノ内線、茗荷谷（みょうがだに）"
 let test2 = hyoji ekimei_ikebukuro = "丸ノ内線、池袋（いけぶくろ）"
 let test3 = hyoji ekimei_tokyo = "山の手線、東京（とうきょう）"
@@ -373,7 +373,7 @@ let rec romaji_to_kanji romaji_ekimei ekimei_list = match ekimei_list with
     [] -> ""
   | {kanji=kanji; romaji=romaji} :: rest -> if romaji_ekimei = romaji then kanji else romaji_to_kanji romaji_ekimei rest
 
-(* テスト *)
+(* テスト：romaji_to_kanji *)
 let test1 = romaji_to_kanji "myogadani" global_ekimei_list = "茗荷谷"
 
 (* 目的：二つの駅名と駅間リストを受け取り、距離を返す *)
@@ -384,7 +384,7 @@ let rec get_ekikan_kyori eki1 eki2 ekikan_list = match ekikan_list with
     if (kiten = eki1 && shuten = eki2) || (kiten = eki2 && shuten = eki1) then kyori
     else get_ekikan_kyori eki1 eki2 rest
 
-(* テスト *)
+(* テスト：get_ekikan_kyori *)
 let test2 = get_ekikan_kyori "茗荷谷" "新大塚" global_ekikan_list = 1.2
 
 (* メッセージの形式にフォーマットする *)
@@ -403,7 +403,7 @@ let kyori_wo_hyoji romaji_ekimei1 romaji_ekimei2 =
     if ekikan_kyori = infinity then eki_does_not_connect_msg kanji_ekimei1 kanji_ekimei2
     else ekikan_msg kanji_ekimei1 kanji_ekimei2 ekikan_kyori
 
-(* テスト *)
+(* テスト：kyori_wo_hyoji *)
 let test3 = kyori_wo_hyoji "myogadani" "shinotsuka" = "茗荷谷駅から新大塚駅までは1.2kmです"
 let test4 = kyori_wo_hyoji "myogadani" "tameikesanno" = "茗荷谷駅と溜池山王駅はつながっていません"
 let test5 = kyori_wo_hyoji "myogadani" "nagaokakyo" = "nagaokakyoという駅は存在しません"
@@ -428,7 +428,7 @@ let rec make_eki_list ekimei_list = match ekimei_list with
     [] -> []
   | {kanji=namae} :: rest -> {namae=namae; saitan_kyori=infinity; temae_list=[]} :: make_eki_list rest
 
-(* テスト *)
+(* テスト：make_eki_list *)
 let test6 = make_eki_list [ekimei_myogadani; ekimei_ikebukuro; ekimei_tokyo]
   = [
     {namae="茗荷谷"; saitan_kyori=infinity; temae_list=[]};
@@ -440,7 +440,7 @@ let test6 = make_eki_list [ekimei_myogadani; ekimei_ikebukuro; ekimei_tokyo]
 (* shokika : eki_t -> eki_t *)
 let shokika eki = match eki with {namae=namae} -> {namae=namae; saitan_kyori=0.; temae_list=[namae]}
 
-(* テスト *)
+(* テスト：shokika *)
 let test7 = shokika {namae="茗荷谷"; saitan_kyori=infinity; temae_list=[]} = {namae="茗荷谷"; saitan_kyori=0.; temae_list=["茗荷谷"]}
 
 (* 目的：駅名のひらがな順で整列した駅名のリストと駅名を受け取り、駅のひらがな名順に適切な位置の挿入した人のリストを返す *)
@@ -462,10 +462,10 @@ let rec seiretsu ekimei_list = match ekimei_sort ekimei_list with
   | first :: [] -> [first]
   | ({kana=fkana} as first) :: ({kana=skana} as second) :: rest -> if fkana = skana then first :: seiretsu rest else first :: seiretsu (second :: rest)
 
-(* テスト *)
+(* テスト：seiretsu *)
 let test8 = seiretsu [ekimei_ikebukuro2; ekimei_tokyo; ekimei_myogadani; ekimei_ikebukuro] = [ekimei_ikebukuro; ekimei_tokyo; ekimei_myogadani]
 
-(* 目的：受け取った駅が直前に確定した点につながっているか確認し、繋がっていなければ何も変更せず、繋がっていれば最短距離を更新する *)
+(* 目的：ある駅と直前に確定した駅を受け取り、ある駅が直前に確定した点につながっているか確認し、繋がっていなければ何も変更せず、繋がっていれば最短距離を更新する *)
 (* koushin1 : eki_t -> eki_t -> eki_t *)
 let koushin1 eki kakutei_eki = match eki with {namae=namae; saitan_kyori=saitan_kyori; temae_list=temae_list} ->
   match kakutei_eki with {namae=kakutei_namae; saitan_kyori=kakutei_saitan_kyori; temae_list=kakutei_temae_list} ->
@@ -479,7 +479,7 @@ let koushin1 eki kakutei_eki = match eki with {namae=namae; saitan_kyori=saitan_
     else
       {namae=namae; saitan_kyori=candidate_saitan_kyori; temae_list=kakutei_namae :: kakutei_temae_list}
 
-(* テスト *)
+(* テスト：koushin1 *)
 let test9 = koushin1 eki_from_iidabashi_to_myogadani_1 eki_from_tokyo_to_otemachi = eki_from_iidabashi_to_myogadani_1
 let test10 = koushin1 eki_from_iidabashi_to_myogadani_1 eki_from_iidabashi_to_shinotsuka = eki_from_iidabashi_to_myogadani_1
 let test11 = koushin1 eki_from_iidabashi_to_myogadani_2 eki_from_iidabashi_to_korakuen = eki_from_iidabashi_to_myogadani_1

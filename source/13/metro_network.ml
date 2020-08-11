@@ -12,12 +12,12 @@ let ekimei_ikebukuro = {kanji="池袋"; kana="いけぶくろ"; romaji="ikebukur
 let ekimei_tokyo = {kanji="東京"; kana="とうきょう"; romaji="tokyo"; shozoku="山の手線";}
 let ekimei_ikebukuro2 = {kanji="池袋"; kana="いけぶくろ"; romaji="ikebukuro"; shozoku="有楽町線";}
 
-(* 目的：駅名のデータを受け取り、駅名を示す文字列を返す *)
+(* 目的：ekimei_t 型のデータを受け取り、駅名を示す文字列を返す *)
 (* hyoji : ekimei_t -> string *)
 let hyoji ekimei = match ekimei with {kanji=kanji; kana=kana; romaji=romaji; shozoku=shozoku;} ->
   shozoku ^ "、" ^ kanji ^ "（" ^ kana ^ "）"
 
-(* テスト：hyoji *)
+(* テスト *)
 let test1 = hyoji ekimei_myogadani = "丸ノ内線、茗荷谷（みょうがだに）"
 let test2 = hyoji ekimei_ikebukuro = "丸ノ内線、池袋（いけぶくろ）"
 let test3 = hyoji ekimei_tokyo = "山の手線、東京（とうきょう）"
@@ -27,8 +27,8 @@ type ekikan_t = {
   kiten: string; (* 起点の駅名 *)
   shuten: string; (* 終点の駅名 *)
   keiyu: string; (* 経由する路線名 *)
-  kyori: float; (* 距離（km） *)
-  jikan: int; (* 所要時間（分） *)
+  kyori: float; (* 距離 [km] *)
+  jikan: int; (* 所要時間 [分] *)
 }
 
 (* メトロネットワークの中のすべての駅名のリスト *)
@@ -367,24 +367,30 @@ let global_ekikan_list = [
     {kiten="営団成増"; shuten="和光市"; keiyu="有楽町線"; kyori=2.1; jikan=3};
 ]
 
-(* 目的：ローマ字の駅名と駅名リストを受け取り、漢字表記の駅名を返す *)
+(* 目的：ローマ字の駅名と ekimei_t 型のリストを受け取り、漢字表記の駅名を返す *)
 (* romaji_to_kanji : string -> ekimei_t list -> string *)
 let rec romaji_to_kanji romaji_ekimei ekimei_list = match ekimei_list with
     [] -> ""
-  | {kanji=kanji; romaji=romaji} :: rest -> if romaji_ekimei = romaji then kanji else romaji_to_kanji romaji_ekimei rest
+  | {kanji=kanji; romaji=romaji} :: rest ->
+    if romaji_ekimei = romaji then
+      kanji
+    else
+      romaji_to_kanji romaji_ekimei rest
 
-(* テスト：romaji_to_kanji *)
+(* テスト *)
 let test1 = romaji_to_kanji "myogadani" global_ekimei_list = "茗荷谷"
 
-(* 目的：二つの駅名と駅間リストを受け取り、距離を返す *)
+(* 目的：二つの駅名と ekikan_t 型のリストを受け取り、距離を返す *)
 (* get_ekikan_kyori : string -> string -> ekikan_t list -> float *)
 let rec get_ekikan_kyori eki1 eki2 ekikan_list = match ekikan_list with
     [] -> infinity
   | {kiten=kiten; shuten=shuten; kyori=kyori} :: rest ->
-    if (kiten = eki1 && shuten = eki2) || (kiten = eki2 && shuten = eki1) then kyori
-    else get_ekikan_kyori eki1 eki2 rest
+    if (kiten = eki1 && shuten = eki2) || (kiten = eki2 && shuten = eki1) then
+      kyori
+    else
+      get_ekikan_kyori eki1 eki2 rest
 
-(* テスト：get_ekikan_kyori *)
+(* テスト *)
 let test2 = get_ekikan_kyori "茗荷谷" "新大塚" global_ekikan_list = 1.2
 
 (* メッセージの形式にフォーマットする *)
@@ -397,13 +403,19 @@ let ekikan_msg kiten shuten kyori = kiten ^ "駅から" ^ shuten ^ "駅までは
 let kyori_wo_hyoji romaji_ekimei1 romaji_ekimei2 =
   let kanji_ekimei1 = romaji_to_kanji romaji_ekimei1 global_ekimei_list in
   let kanji_ekimei2 = romaji_to_kanji romaji_ekimei2 global_ekimei_list in
-  if kanji_ekimei1 = "" then eki_does_not_exist_msg romaji_ekimei1
-  else if kanji_ekimei2 = "" then eki_does_not_exist_msg romaji_ekimei2
-  else let ekikan_kyori = get_ekikan_kyori kanji_ekimei1 kanji_ekimei2 global_ekikan_list in
-    if ekikan_kyori = infinity then eki_does_not_connect_msg kanji_ekimei1 kanji_ekimei2
-    else ekikan_msg kanji_ekimei1 kanji_ekimei2 ekikan_kyori
+  if kanji_ekimei1 = "" then
+    eki_does_not_exist_msg romaji_ekimei1
+  else
+    if kanji_ekimei2 = "" then
+      eki_does_not_exist_msg romaji_ekimei2
+    else
+      let ekikan_kyori = get_ekikan_kyori kanji_ekimei1 kanji_ekimei2 global_ekikan_list in
+      if ekikan_kyori = infinity then
+        eki_does_not_connect_msg kanji_ekimei1 kanji_ekimei2
+      else
+        ekikan_msg kanji_ekimei1 kanji_ekimei2 ekikan_kyori
 
-(* テスト：kyori_wo_hyoji *)
+(* テスト *)
 let test3 = kyori_wo_hyoji "myogadani" "shinotsuka" = "茗荷谷駅から新大塚駅までは1.2kmです"
 let test4 = kyori_wo_hyoji "myogadani" "tameikesanno" = "茗荷谷駅と溜池山王駅はつながっていません"
 let test5 = kyori_wo_hyoji "myogadani" "nagaokakyo" = "nagaokakyoという駅は存在しません"
@@ -411,24 +423,22 @@ let test5 = kyori_wo_hyoji "myogadani" "nagaokakyo" = "nagaokakyoという駅は
 (* 駅までの最短距離を記録する型 *)
 type eki_t = {
   namae: string;  (* 漢字 *)
-  saitan_kyori: float;
+  saitan_kyori: float;  (* [km] *)
   temae_list: string list;
 }
 
 (* eki_t 型のデータ例 *)
-let eki_from_iidabashi_to_myogadani_1 = {namae="茗荷谷"; saitan_kyori=3.2; temae_list=["後楽園"; "飯田橋"]}
-let eki_from_iidabashi_to_korakuen = {namae="後楽園"; saitan_kyori=1.4; temae_list=["飯田橋"]}
-let eki_from_iidabashi_to_myogadani_2 = {namae="茗荷谷"; saitan_kyori=9.; temae_list=["新大塚"; "池袋"; "東池袋"; "護国寺"; "江戸川橋"; "飯田橋"]}
-let eki_from_iidabashi_to_shinotsuka = {namae="新大塚"; saitan_kyori=7.8; temae_list=["池袋"; "東池袋"; "護国寺"; "江戸川橋"; "飯田橋"]}
-let eki_from_tokyo_to_otemachi = {namae="大手町"; saitan_kyori=0.6; temae_list=["東京"]}
+let eki_myogadani = {namae="茗荷谷"; saitan_kyori=infinity; temae_list=[]}
+let eki_ikebukuro = {namae="池袋"; saitan_kyori=infinity; temae_list=[]}
+let eki_tokyo = {namae="東京"; saitan_kyori=infinity; temae_list=[]}
 
-(* 目的：駅名のリストを受け取り、ダイクストラ法で用いる最短距離リストを作成する *)
+(* 目的：ekimei_t 型のリストを受け取り、ダイクストラ法で用いる eki_t 型のリストを作成する *)
 (* make_eki_list : ekimei_t list -> eki_t list *)
 let rec make_eki_list ekimei_list = match ekimei_list with
     [] -> []
   | {kanji=namae} :: rest -> {namae=namae; saitan_kyori=infinity; temae_list=[]} :: make_eki_list rest
 
-(* テスト：make_eki_list *)
+(* テスト *)
 let test6 = make_eki_list [ekimei_myogadani; ekimei_ikebukuro; ekimei_tokyo]
   = [
     {namae="茗荷谷"; saitan_kyori=infinity; temae_list=[]};
@@ -436,38 +446,52 @@ let test6 = make_eki_list [ekimei_myogadani; ekimei_ikebukuro; ekimei_tokyo]
     {namae="東京"; saitan_kyori=infinity; temae_list=[]}
   ]
 
-(* 目的：駅までの最短距離を記録する型を受け取り、初期化する *)
-(* shokika : eki_t -> eki_t *)
-let shokika eki = match eki with {namae=namae} -> {namae=namae; saitan_kyori=0.; temae_list=[namae]}
+(* 目的：eki_t 型のリストと駅名を受け取り、対称の駅のデータのみ初期化した eki_t 型のリストを返す *)
+(* shokika : eki_t list -> string -> eki_t list *)
+let rec shokika lst kanji_ekimei = match lst with
+    [] -> []
+  | ({namae=namae} as first) :: rest ->
+    if namae = kanji_ekimei then
+      {namae=namae; saitan_kyori=0.; temae_list=[namae]} :: shokika rest kanji_ekimei
+    else
+      first :: shokika rest kanji_ekimei
 
-(* テスト：shokika *)
-let test7 = shokika {namae="茗荷谷"; saitan_kyori=infinity; temae_list=[]} = {namae="茗荷谷"; saitan_kyori=0.; temae_list=["茗荷谷"]}
+(* テスト *)
+let test7 = shokika [eki_myogadani; eki_ikebukuro; eki_tokyo] "東京" = [eki_myogadani; eki_ikebukuro; {namae="東京"; saitan_kyori=0.; temae_list=["東京"]}]
 
-(* 目的：駅名のひらがな順で整列した駅名のリストと駅名を受け取り、駅のひらがな名順に適切な位置の挿入した人のリストを返す *)
+(* 目的：駅名のひらがな順で整列した ekimei_t 型のリストと ekimei_t 型を受け取り、駅のひらがな名順に適切な位置の挿入した ekimei_t 型のリストを返す *)
 (* ekimei_insert : ekimei_t list -> ekimei_t -> ekimei_t list *)
 let rec ekimei_insert lst ekimei = match ekimei with {kana=kana} -> match lst with
     [] -> [ekimei]
-  | ({kana=fkana} as first) :: rest -> if fkana > kana then ekimei :: lst else first :: ekimei_insert rest ekimei
+  | ({kana=k} as first) :: rest ->
+    if k > kana then
+      ekimei :: lst
+    else
+      first :: ekimei_insert rest ekimei
 
-(* 目的：駅名のリストを受け取り、駅のひらがな名順で整列した駅名のリストを返す *)
+(* 目的：ekimei_t 型のリストを受け取り、駅のひらがな名順で整列した ekimei_t 型のリストを返す *)
 (* ekimei_sort : ekimei_t list -> ekimei_t list *)
 let rec ekimei_sort lst = match lst with
     [] -> []
   | first :: rest -> ekimei_insert (ekimei_sort rest) first
 
-(* 目的：駅名のリストを受け取り、ひらがなの順に並び替え重複を削除して返す *)
+(* 目的：ekimei_t 型のリストを受け取り、ひらがなの順に並び替え重複を削除した ekimei_t 型のリストを返す *)
 (* seiretsu : ekimei_t list -> ekimei_t list *)
 let rec seiretsu ekimei_list = match ekimei_sort ekimei_list with
     [] -> []
   | first :: [] -> [first]
-  | ({kana=fkana} as first) :: ({kana=skana} as second) :: rest -> if fkana = skana then first :: seiretsu rest else first :: seiretsu (second :: rest)
+  | ({kana=first_k} as first) :: ({kana=second_k} as second) :: rest ->
+    if first_k = second_k then
+      first :: seiretsu rest
+    else
+      first :: seiretsu (second :: rest)
 
-(* テスト：seiretsu *)
+(* テスト *)
 let test8 = seiretsu [ekimei_ikebukuro2; ekimei_tokyo; ekimei_myogadani; ekimei_ikebukuro] = [ekimei_ikebukuro; ekimei_tokyo; ekimei_myogadani]
 
-(* 目的：ある駅と直前に確定した駅を受け取り、ある駅が直前に確定した点につながっているか確認し、繋がっていなければ何も変更せず、繋がっていれば最短距離を更新する *)
+(* 目的：直前に確定した駅と未確定の駅を受け取り、ある駅が直前に確定した点につながっているか確認し、繋がっていなければ何も変更せず、繋がっていれば最短距離を更新する *)
 (* koushin1 : eki_t -> eki_t -> eki_t *)
-let koushin1 eki kakutei_eki = match eki with {namae=namae; saitan_kyori=saitan_kyori; temae_list=temae_list} ->
+let koushin1 kakutei_eki eki = match eki with {namae=namae; saitan_kyori=saitan_kyori; temae_list=temae_list} ->
   match kakutei_eki with {namae=kakutei_namae; saitan_kyori=kakutei_saitan_kyori; temae_list=kakutei_temae_list} ->
   let kyori = get_ekikan_kyori namae kakutei_namae global_ekikan_list in
   if kyori = infinity then

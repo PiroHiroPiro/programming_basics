@@ -428,9 +428,15 @@ type eki_t = {
 }
 
 (* eki_t 型のデータ例 *)
-let eki_myogadani = {namae="茗荷谷"; saitan_kyori=infinity; temae_list=[]}
-let eki_ikebukuro = {namae="池袋"; saitan_kyori=infinity; temae_list=[]}
-let eki_tokyo = {namae="東京"; saitan_kyori=infinity; temae_list=[]}
+let eki_shokika_myogadani = {namae="茗荷谷"; saitan_kyori=infinity; temae_list=[]}
+let eki_shokika_ikebukuro = {namae="池袋"; saitan_kyori=infinity; temae_list=[]}
+let eki_shokika_tokyo = {namae="東京"; saitan_kyori=infinity; temae_list=[]}
+
+let eki_from_iidabashi_to_myogadani_1 = {namae="茗荷谷"; saitan_kyori=3.2; temae_list=["茗荷谷"; "後楽園"; "飯田橋"]}
+let eki_from_iidabashi_to_myogadani_2 = {namae="茗荷谷"; saitan_kyori=9.; temae_list=["茗荷谷"; "新大塚"; "池袋"; "東池袋"; "護国寺"; "江戸川橋"; "飯田橋"]}
+let eki_from_tokyo_to_otemachi = {namae="大手町"; saitan_kyori=0.6; temae_list=["大手町"; "東京"]}
+let eki_from_iidabashi_to_shinotsuka = {namae="新大塚"; saitan_kyori=7.8; temae_list=["新大塚"; "池袋"; "東池袋"; "護国寺"; "江戸川橋"; "飯田橋"]}
+let eki_from_iidabashi_to_korakuen = {namae="後楽園"; saitan_kyori=1.4; temae_list=["後楽園"; "飯田橋"]}
 
 (* 目的：ekimei_t 型のリストを受け取り、ダイクストラ法で用いる eki_t 型のリストを作成する *)
 (* make_eki_list : ekimei_t list -> eki_t list *)
@@ -457,7 +463,7 @@ let rec shokika lst kanji_ekimei = match lst with
       first :: shokika rest kanji_ekimei
 
 (* テスト *)
-let test7 = shokika [eki_myogadani; eki_ikebukuro; eki_tokyo] "東京" = [eki_myogadani; eki_ikebukuro; {namae="東京"; saitan_kyori=0.; temae_list=["東京"]}]
+let test7 = shokika [eki_shokika_myogadani; eki_shokika_ikebukuro; eki_shokika_tokyo] "東京" = [eki_shokika_myogadani; eki_shokika_ikebukuro; {namae="東京"; saitan_kyori=0.; temae_list=["東京"]}]
 
 (* 目的：駅名のひらがな順で整列した ekimei_t 型のリストと ekimei_t 型を受け取り、駅のひらがな名順に適切な位置の挿入した ekimei_t 型のリストを返す *)
 (* ekimei_insert : ekimei_t list -> ekimei_t -> ekimei_t list *)
@@ -501,9 +507,56 @@ let koushin1 kakutei_eki eki = match eki with {namae=namae; saitan_kyori=saitan_
     if candidate_saitan_kyori > saitan_kyori then
       eki
     else
-      {namae=namae; saitan_kyori=candidate_saitan_kyori; temae_list=kakutei_namae :: kakutei_temae_list}
+      {namae=namae; saitan_kyori=candidate_saitan_kyori; temae_list=namae :: kakutei_temae_list}
 
 (* テスト：koushin1 *)
-let test9 = koushin1 eki_from_iidabashi_to_myogadani_1 eki_from_tokyo_to_otemachi = eki_from_iidabashi_to_myogadani_1
-let test10 = koushin1 eki_from_iidabashi_to_myogadani_1 eki_from_iidabashi_to_shinotsuka = eki_from_iidabashi_to_myogadani_1
-let test11 = koushin1 eki_from_iidabashi_to_myogadani_2 eki_from_iidabashi_to_korakuen = eki_from_iidabashi_to_myogadani_1
+let test9 = koushin1 eki_from_tokyo_to_otemachi eki_from_iidabashi_to_myogadani_1 = eki_from_iidabashi_to_myogadani_1
+let test10 = koushin1 eki_from_iidabashi_to_shinotsuka eki_from_iidabashi_to_myogadani_1 = eki_from_iidabashi_to_myogadani_1
+let test11 = koushin1 eki_from_iidabashi_to_korakuen eki_from_iidabashi_to_myogadani_2 = eki_from_iidabashi_to_myogadani_1
+
+(* 目的：関数とリストを受け取り、関数を施したリストを返す *)
+(* map : ('a -> 'b) -> 'a list -> 'b list *)
+let rec map f lst = match lst with
+    [] -> []
+  | first :: rest -> f first :: map f rest
+
+(* List が空のときの例外 *)
+exception List_ga_kara
+
+(* 目的：変更後の eki_t 型のリストを受け取り、確定する eki_t 型を返す *)
+(* get_kakutei_eki : eki_t list -> eki_t *)
+let rec get_kakutei_eki koushin_after = match koushin_after with
+    [] -> {namae=""; saitan_kyori=infinity; temae_list=[]}
+  | ({saitan_kyori=saitan_kyori} as first) :: rest ->
+    let min_eki = get_kakutei_eki rest in
+    match min_eki with {saitan_kyori=min_saitan_kyori} ->
+      if saitan_kyori < min_saitan_kyori then
+        first
+      else
+        min_eki
+
+(* テスト：get_kakutei_eki *)
+let test12 = get_kakutei_eki [eki_from_iidabashi_to_myogadani_2; eki_from_iidabashi_to_shinotsuka; eki_from_tokyo_to_otemachi] = eki_from_tokyo_to_otemachi
+
+(* 目的：変更後の eki_t 型のリストとリスト内の最小の駅リストを受け取り、未確定の eki_t 型のリストを返す *)
+(* undecided_eki_lst : eki_t list -> eki_t -> eki_t list *)
+let rec undecided_eki_lst koushi_after kakutei_eki = match koushi_after with
+    [] -> []
+  | first :: rest ->
+    if first == kakutei_eki then
+      undecided_eki_lst rest kakutei_eki
+    else
+      first :: undecided_eki_lst rest kakutei_eki
+
+(* テスト：undecided_eki_lst *)
+let test13 = undecided_eki_lst [eki_from_iidabashi_to_myogadani_2; eki_from_iidabashi_to_shinotsuka; eki_from_tokyo_to_otemachi] eki_from_tokyo_to_otemachi = [eki_from_iidabashi_to_myogadani_2; eki_from_iidabashi_to_shinotsuka]
+
+(* 目的：確定した eki_t 型と未確定の eki_t 型のリストを受け取り、更新処理を実施し未確定の eki_t 型のリストを返す *)
+(* koushin : eki_t -> eki_t list -> eki_t list *)
+let koushin kakutei_eki koushin_before = let f = koushin1 kakutei_eki in
+    let koushin_after = map f koushin_before in
+    let new_kakutei_eki = get_kakutei_eki koushin_after in
+    undecided_eki_lst koushin_after new_kakutei_eki
+
+(* テスト：koushin *)
+let test14 = koushin eki_from_iidabashi_to_korakuen [eki_from_iidabashi_to_myogadani_2; eki_shokika_ikebukuro; eki_shokika_tokyo] = [eki_shokika_ikebukuro; eki_shokika_tokyo]

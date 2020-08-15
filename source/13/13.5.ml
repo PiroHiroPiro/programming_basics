@@ -4,4 +4,4 @@ let twice f = let g x = f (f x) in g
 
 (* 目的：関数を受け取り、受け取った関数を四回実行する関数を返す *)
 (* ('a -> 'a) -> 'a -> 'a *)
-twice twice
+let twice_twice = twice twice

@@ -34,7 +34,7 @@ let test1 = get_person_name person_1 = "たかし"
 
 (* 目的：人のリストを受け取り、名前のリストを返す *)
 (* person_namae : person_t list -> string list *)
-let rec person_namae lst = map get_person_name lst
+let person_namae lst = map get_person_name lst
 
 (* テスト *)
 let test2 = person_namae [person_1; person_2; person_3] = ["たかし"; "えみ"; "とおる"]

@@ -514,13 +514,15 @@ let test9 = koushin1 eki_from_tokyo_to_otemachi eki_from_iidabashi_to_myogadani_
 let test10 = koushin1 eki_from_iidabashi_to_shinotsuka eki_from_iidabashi_to_myogadani_1 = eki_from_iidabashi_to_myogadani_1
 let test11 = koushin1 eki_from_iidabashi_to_korakuen eki_from_iidabashi_to_myogadani_2 = eki_from_iidabashi_to_myogadani_1
 
-(* 目的：関数とリストを受け取り、関数を施したリストを返す *)
-(* map : ('a -> 'b) -> 'a list -> 'b list *)
-let rec map f lst = match lst with
-    [] -> []
-  | first :: rest -> f first :: map f rest
+(* 目的：確定した eki_t 型と未確定の eki_t 型のリストを受け取り、更新処理を実施し未確定の eki_t 型のリストを返す *)
+(* koushin : eki_t -> eki_t list -> eki_t list *)
+let koushin kakutei_eki koushin_before = let f = koushin1 kakutei_eki in List.map f koushin_before
 
-(* List が空のときの例外 *)
+(* テスト：koushin *)
+let test12 = koushin eki_from_iidabashi_to_korakuen [eki_from_iidabashi_to_myogadani_2; eki_shokika_ikebukuro; eki_shokika_tokyo] = [eki_from_iidabashi_to_myogadani_1; eki_shokika_ikebukuro; eki_shokika_tokyo]
+
+(* 以降、勘違いで書いたコード *)
+(* List が空のときの例外
 exception List_ga_kara
 
 (* 目的：変更後の eki_t 型のリストを受け取り、確定する eki_t 型を返す *)
@@ -543,8 +545,8 @@ let test12 = get_kakutei_eki [eki_from_iidabashi_to_myogadani_2; eki_from_iidaba
 let rec undecided_eki_lst koushi_after kakutei_eki = match koushi_after with
     [] -> []
   | first :: rest ->
-    if first == kakutei_eki then
-      undecided_eki_lst rest kakutei_eki
+    if first = kakutei_eki then
+      rest
     else
       first :: undecided_eki_lst rest kakutei_eki
 
@@ -559,4 +561,4 @@ let koushin kakutei_eki koushin_before = let f = koushin1 kakutei_eki in
     undecided_eki_lst koushin_after new_kakutei_eki
 
 (* テスト：koushin *)
-let test14 = koushin eki_from_iidabashi_to_korakuen [eki_from_iidabashi_to_myogadani_2; eki_shokika_ikebukuro; eki_shokika_tokyo] = [eki_shokika_ikebukuro; eki_shokika_tokyo]
+let test14 = koushin eki_from_iidabashi_to_korakuen [eki_from_iidabashi_to_myogadani_2; eki_shokika_ikebukuro; eki_shokika_tokyo] = [eki_shokika_ikebukuro; eki_shokika_tokyo] *)

@@ -7,3 +7,4 @@ let compose func1 func2 = let func x = func1 (func2 x) in func
 let time2 x = x * 2
 let add3 x = x + 3
 let test1 = compose time2 add3 4 = 14
+let test2 = compose add3 time2 4 = 11

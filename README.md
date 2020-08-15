@@ -24,7 +24,7 @@ $ docker-compose run ocaml ocaml uitls/sample.ml
 Run interactive console:
 
 ```console
-$ docker-compose run ocaml ocaml
+$ docker-compose run ocaml rlwrap ocaml
 ```
 
 Exit interactive console: `exit 0;;` or `#quit;;`.
@@ -36,4 +36,10 @@ Clone repository:
 ```console
 $ git clone https://github.com/PiroHiroPiro/programming_basics.git
 $ cd programming_basics
+```
+
+Build image:
+
+```console
+$ docker-compose build
 ```

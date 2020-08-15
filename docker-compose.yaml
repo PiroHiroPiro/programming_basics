@@ -2,7 +2,9 @@ version: "3"
 
 services:
   ocaml:
-    image: ocaml/opam2
+    build:
+      context: .
+      dockerfile: ./docker/ocaml/Dockerfile
     container_name: ocaml_container
     tty: true
     volumes:

@@ -1,7 +1,6 @@
 (* 目的：整数のリストを受け取り、偶数の要素のみを含むリストを返す *)
 (* even : int list -> int list *)
-let even lst = let is_even n = n mod 2 == 0 in
-  List.filter is_even lst
+let even lst = List.filter (fun n -> n mod 2 == 0) lst
 
 (* テスト *)
 let test1 = even [2; 1; 6; 4; 7] = [2; 6; 4]

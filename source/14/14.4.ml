@@ -25,7 +25,7 @@ let gakusei_80 = {namae="とおる"; tensuu=80; seiseki="B";}
 
 (* 目的：gakusei_t 型のリストを受け取り、合計点数を返す *)
 (* gakusei_sum : gakusei_t list -> int *)
-let gakusei_sum lst = let f gakusei sum = gakusei.tensuu + sum in fold_right f lst 0
+let gakusei_sum lst = fold_right (fun gakusei sum -> gakusei.tensuu + sum) lst 0
 
 (* テスト *)
 let test1 = gakusei_sum [] = 0

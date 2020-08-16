@@ -19,9 +19,7 @@ let gakusei_B = {namae="とおる"; tensuu=82; seiseki="B";}
 
 (* 目的：gakusei_t 型のリストを受け取り、成績が A の学生を返す *)
 (* count_A : gakusei_t list -> int *)
-let count_A lst = let has_A gakusei = gakusei.seiseki = "A" in
-  let filtered_lst = List.filter has_A lst in
-  List.length filtered_lst
+let count_A lst = List.length (List.filter (fun gakusei -> gakusei.seiseki = "A") lst)
 
 (* テスト *)
 let test1 = count_A [] = 0

@@ -438,32 +438,16 @@ let eki_from_tokyo_to_otemachi = {namae="大手町"; saitan_kyori=0.6; temae_lis
 let eki_from_iidabashi_to_shinotsuka = {namae="新大塚"; saitan_kyori=7.8; temae_list=["新大塚"; "池袋"; "東池袋"; "護国寺"; "江戸川橋"; "飯田橋"]}
 let eki_from_iidabashi_to_korakuen = {namae="後楽園"; saitan_kyori=1.4; temae_list=["後楽園"; "飯田橋"]}
 
-(* 目的：ekimei_t 型のリストを受け取り、ダイクストラ法で用いる eki_t 型のリストを作成する *)
-(* make_eki_list : ekimei_t list -> eki_t list *)
-let rec make_eki_list ekimei_list = match ekimei_list with
-    [] -> []
-  | {kanji=namae} :: rest -> {namae=namae; saitan_kyori=infinity; temae_list=[]} :: make_eki_list rest
+(* 目的：ekimei_t 型のリストと駅名を受け取り、ダイクストラ法で用いる eki_t 型のリストを作成する、また対称の駅のデータのみ初期化する *)
+(* make_initial_eki_list : ekimei_t list -> string -> eki_t list *)
+let make_initial_eki_list ekimei_list kanji_ekimei = List.map (fun eki -> if eki.namae = kanji_ekimei then {namae=eki.namae; saitan_kyori=0.; temae_list=[eki.namae]} else {namae=eki.namae; saitan_kyori=infinity; temae_list=[]}) ekimei_list
 
-(* テスト *)
-let test6 = make_eki_list [ekimei_myogadani; ekimei_ikebukuro; ekimei_tokyo]
-  = [
-    {namae="茗荷谷"; saitan_kyori=infinity; temae_list=[]};
-    {namae="池袋"; saitan_kyori=infinity; temae_list=[]};
-    {namae="東京"; saitan_kyori=infinity; temae_list=[]}
-  ]
-
-(* 目的：eki_t 型のリストと駅名を受け取り、対称の駅のデータのみ初期化した eki_t 型のリストを返す *)
-(* shokika : eki_t list -> string -> eki_t list *)
-let rec shokika lst kanji_ekimei = match lst with
-    [] -> []
-  | ({namae=namae} as first) :: rest ->
-    if namae = kanji_ekimei then
-      {namae=namae; saitan_kyori=0.; temae_list=[namae]} :: shokika rest kanji_ekimei
-    else
-      first :: shokika rest kanji_ekimei
-
-(* テスト *)
-let test7 = shokika [eki_shokika_myogadani; eki_shokika_ikebukuro; eki_shokika_tokyo] "東京" = [eki_shokika_myogadani; eki_shokika_ikebukuro; {namae="東京"; saitan_kyori=0.; temae_list=["東京"]}]
+(* テスト：make_initial_eki_list *)
+let test6 = make_initial_eki_list [eki_shokika_myogadani; eki_shokika_ikebukuro; eki_shokika_tokyo] "東京" = [
+  {namae="茗荷谷"; saitan_kyori=infinity; temae_list=[]};
+  {namae="池袋"; saitan_kyori=infinity; temae_list=[]};
+  {namae="東京"; saitan_kyori=0.; temae_list=["東京"]}
+]
 
 (* 目的：駅名のひらがな順で整列した ekimei_t 型のリストと ekimei_t 型を受け取り、駅のひらがな名順に適切な位置の挿入した ekimei_t 型のリストを返す *)
 (* ekimei_insert : ekimei_t list -> ekimei_t -> ekimei_t list *)
@@ -493,23 +477,28 @@ let rec seiretsu ekimei_list = match ekimei_sort ekimei_list with
       first :: seiretsu (second :: rest)
 
 (* テスト *)
-let test8 = seiretsu [ekimei_ikebukuro2; ekimei_tokyo; ekimei_myogadani; ekimei_ikebukuro] = [ekimei_ikebukuro; ekimei_tokyo; ekimei_myogadani]
+let test7 = seiretsu [ekimei_ikebukuro2; ekimei_tokyo; ekimei_myogadani; ekimei_ikebukuro] = [ekimei_ikebukuro; ekimei_tokyo; ekimei_myogadani]
 
 (* 目的：確定した eki_t 型と未確定の eki_t 型のリストを受け取り、更新処理を実施し未確定の eki_t 型のリストを返す *)
 (* koushin : eki_t -> eki_t list -> eki_t list *)
-let koushin kakutei_eki koushin_before =
-  let koushin1 kakutei_eki eki = match eki with {namae=namae; saitan_kyori=saitan_kyori; temae_list=temae_list} ->
-    match kakutei_eki with {namae=kakutei_namae; saitan_kyori=kakutei_saitan_kyori; temae_list=kakutei_temae_list} ->
-    let kyori = get_ekikan_kyori namae kakutei_namae global_ekikan_list in
-    if kyori = infinity then
-      eki
-    else
-      let candidate_saitan_kyori = kakutei_saitan_kyori +. kyori in
-      if candidate_saitan_kyori > saitan_kyori then
-        eki
-      else
-        {namae=namae; saitan_kyori=candidate_saitan_kyori; temae_list=namae :: kakutei_temae_list}
-  in let f = koushin1 kakutei_eki in List.map f koushin_before
+let koushin kakutei_eki koushin_before = List.map
+  (
+    (
+      fun kakutei_eki eki -> match eki with {namae=namae; saitan_kyori=saitan_kyori; temae_list=temae_list} ->
+        match kakutei_eki with {namae=kakutei_namae; saitan_kyori=kakutei_saitan_kyori; temae_list=kakutei_temae_list} ->
+          let kyori = get_ekikan_kyori namae kakutei_namae global_ekikan_list in
+            if kyori = infinity then
+              eki
+            else
+              let candidate_saitan_kyori = kakutei_saitan_kyori +. kyori in
+              if candidate_saitan_kyori > saitan_kyori then
+                eki
+              else
+                {namae=namae; saitan_kyori=candidate_saitan_kyori; temae_list=namae :: kakutei_temae_list}
+    )
+    kakutei_eki
+  )
+  koushin_before
 
 (* テスト：koushin *)
-let test9 = koushin eki_from_iidabashi_to_korakuen [eki_from_iidabashi_to_myogadani_2; eki_shokika_ikebukuro; eki_shokika_tokyo] = [eki_from_iidabashi_to_myogadani_1; eki_shokika_ikebukuro; eki_shokika_tokyo]
+let test8 = koushin eki_from_iidabashi_to_korakuen [eki_from_iidabashi_to_myogadani_2; eki_shokika_ikebukuro; eki_shokika_tokyo] = [eki_from_iidabashi_to_myogadani_1; eki_shokika_ikebukuro; eki_shokika_tokyo]

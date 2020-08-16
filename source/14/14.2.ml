@@ -1,5 +1,3 @@
-#use "utils/common.ml"
-
 (* 学生データの型 *)
 type gakusei_t = {
   namae: string;

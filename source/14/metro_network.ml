@@ -440,7 +440,12 @@ let eki_from_iidabashi_to_korakuen = {namae="後楽園"; saitan_kyori=1.4; temae
 
 (* 目的：ekimei_t 型のリストと駅名を受け取り、ダイクストラ法で用いる eki_t 型のリストを作成する、また対称の駅のデータのみ初期化する *)
 (* make_initial_eki_list : ekimei_t list -> string -> eki_t list *)
-let make_initial_eki_list ekimei_list kanji_ekimei = List.map (fun eki -> if eki.namae = kanji_ekimei then {namae=eki.namae; saitan_kyori=0.; temae_list=[eki.namae]} else {namae=eki.namae; saitan_kyori=infinity; temae_list=[]}) ekimei_list
+let make_initial_eki_list ekimei_list kanji_ekimei = 
+    List.map 
+        (fun eki -> if eki.namae = kanji_ekimei 
+            then {namae=eki.namae; saitan_kyori=0.; temae_list=[eki.namae]} 
+            else {namae=eki.namae; saitan_kyori=infinity; temae_list=[]}) 
+        ekimei_list
 
 (* テスト：make_initial_eki_list *)
 let test6 = make_initial_eki_list [eki_shokika_myogadani; eki_shokika_ikebukuro; eki_shokika_tokyo] "東京" = [

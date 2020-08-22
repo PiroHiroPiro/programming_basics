@@ -1,6 +1,6 @@
 (* 目的：n から 1 までのリストを作る *)
 (* enumerate : int -> int list *)
-let rec enumerate n = if n = 0 then [] else n :: enumerate (n - 1)
+let rec enumerate n = if n <= 0 then [] else n :: enumerate (n - 1)
 
 (* 目的：init から始めて lst の要素を右から順に f を施し込む*)
 (* fold_right : ('a -> 'b -> 'b) -> 'a list -> 'b -> 'b *)

@@ -1,5 +1,4 @@
 #use "metro/10.ml"
-#use "metro/eki.ml"
 
 (* 目的：ekimei_t 型のリストと駅名を受け取り、ダイクストラ法で用いる eki_t 型のリストを作成する、また対称の駅のデータのみ初期化する *)
 (* make_initial_eki_list : ekimei_t list -> string -> eki_t list *)
@@ -11,7 +10,7 @@ let make_initial_eki_list ekimei_list kanji_ekimei =
     ekimei_list
 
 (* テスト：make_initial_eki_list *)
-let test1 = make_initial_eki_list [eki_shokika_myogadani; eki_shokika_ikebukuro; eki_shokika_tokyo] "東京" = [
+let test_12_1 = make_initial_eki_list [eki_shokika_myogadani; eki_shokika_ikebukuro; eki_shokika_tokyo] "東京" = [
   {namae="茗荷谷"; saitan_kyori=infinity; temae_list=[]};
   {namae="池袋"; saitan_kyori=infinity; temae_list=[]};
   {namae="東京"; saitan_kyori=0.; temae_list=["東京"]}
@@ -42,5 +41,5 @@ let rec seiretsu ekimei_list = match ekimei_sort ekimei_list with
       then first :: seiretsu rest
       else first :: seiretsu (second :: rest)
 
-(* テスト *)
-let test2 = seiretsu [ekimei_ikebukuro2; ekimei_tokyo; ekimei_myogadani; ekimei_ikebukuro] = [ekimei_ikebukuro; ekimei_tokyo; ekimei_myogadani]
+(* テスト：seiretsu *)
+let test_12_2 = seiretsu [ekimei_ikebukuro2; ekimei_tokyo; ekimei_myogadani; ekimei_ikebukuro] = [ekimei_ikebukuro; ekimei_tokyo; ekimei_myogadani]

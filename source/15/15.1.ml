@@ -3,7 +3,7 @@
 let rec quick_sort lst =
   (* 目的：lst の中から n より p である要素のみ取り出す *)
   (* take : int -> int list -> (int -> int -> bool) -> int list *)
-  let take n lst p = List.filter(fun item -> p item n) lst
+  let take n lst p = List.filter (fun item -> p item n) lst
   (* 目的：lst の中から n より小さな要素のみを取り出す *)
   (* take_less : int -> int list -> int list *)
   in let take_less n lst = take n lst (<)

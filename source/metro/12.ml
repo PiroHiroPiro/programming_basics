@@ -16,24 +16,24 @@ let test_12_1 = make_initial_eki_list [eki_shokika_myogadani; eki_shokika_ikebuk
   {namae="東京"; saitan_kyori=0.; temae_list=["東京"]}
 ]
 
-(* 目的：駅名のひらがな順で整列した ekimei_t 型のリストと ekimei_t 型を受け取り、駅のひらがな名順に適切な位置の挿入した ekimei_t 型のリストを返す *)
-(* ekimei_insert : ekimei_t list -> ekimei_t -> ekimei_t list *)
-let rec ekimei_insert lst ekimei = match ekimei with {kana=kana} -> match lst with
-    [] -> [ekimei]
-  | ({kana=k} as first) :: rest ->
-    if k > kana
-      then ekimei :: lst
-      else first :: ekimei_insert rest ekimei
-
-(* 目的：ekimei_t 型のリストを受け取り、駅のひらがな名順で整列した ekimei_t 型のリストを返す *)
-(* ekimei_sort : ekimei_t list -> ekimei_t list *)
-let rec ekimei_sort lst = match lst with
-    [] -> []
-  | first :: rest -> ekimei_insert (ekimei_sort rest) first
-
 (* 目的：ekimei_t 型のリストを受け取り、ひらがなの順に並び替え重複を削除した ekimei_t 型のリストを返す *)
 (* seiretsu : ekimei_t list -> ekimei_t list *)
-let rec seiretsu ekimei_list = match ekimei_sort ekimei_list with
+let rec seiretsu ekimei_list =
+  (* 目的：ekimei_t 型のリストを受け取り、駅のひらがな名順で整列した ekimei_t 型のリストを返す *)
+  (* ekimei_sort : ekimei_t list -> ekimei_t list *)
+  let rec ekimei_sort lst =
+    (* 目的：駅名のひらがな順で整列した ekimei_t 型のリストと ekimei_t 型を受け取り、駅のひらがな名順に適切な位置の挿入した ekimei_t 型のリストを返す *)
+    (* ekimei_insert : ekimei_t list -> ekimei_t -> ekimei_t list *)
+    let rec ekimei_insert lst ekimei = match ekimei with {kana=kana} -> match lst with
+        [] -> [ekimei]
+      | ({kana=k} as first) :: rest ->
+        if k > kana
+          then ekimei :: lst
+          else first :: ekimei_insert rest ekimei
+    in match lst with
+      [] -> []
+    | first :: rest -> ekimei_insert (ekimei_sort rest) first
+  in match ekimei_sort ekimei_list with
     [] -> []
   | first :: [] -> [first]
   | ({kana=first_k} as first) :: ({kana=second_k} as second) :: rest ->

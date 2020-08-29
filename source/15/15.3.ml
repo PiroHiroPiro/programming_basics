@@ -13,12 +13,12 @@ let rec quick_sort lst =
   (* 目的：lst の中から n より p である要素のみ取り出す *)
   (* take : int -> int list -> (int -> int -> bool) -> int list *)
   let take n lst p = List.filter (fun item -> p item n) lst
-  (* 目的：lst の中から n より小さな要素のみを取り出す *)
+  (* 目的：lst の中から n 以下の要素のみを取り出す *)
   (* take_less : int -> int list -> int list *)
-  in let take_less n lst = take n lst (<)
+  in let take_less n lst = take n lst (<=)
   (* 目的：lst の中から n より大きな要素のみを取り出す *)
   (* take_greater : int -> int list -> int list *)
-  in let take_greater n lst = take n lst (>=)
+  in let take_greater n lst = take n lst (>)
   in match lst with
       [] -> []
     | first :: rest -> quick_sort (take_less first rest)
@@ -28,12 +28,9 @@ let rec quick_sort lst =
 (* 目的：自然数を受け取り、それ以下の素数のリストを返す *)
 (* prime : int -> int list *)
 let prime n =
-  (* 目的：n ~ 2 のリストを作成する *)
-  (* enumerate_n_to_2 : int -> int list *)
-  let rec enumerate_n_to_2 n = if n <= 1 then [] else n :: enumerate_n_to_2 (n - 1) in
   (* 目的：2 ~ n のリストを作成する *)
   (* enumerate_2_to_n : int -> int list *)
-  let enumerate_2_to_n n = quick_sort (enumerate_n_to_2 n) in
+  let rec enumerate_2_to_n n = if n <= 1 then [] else enumerate_2_to_n (n - 1) @ [n] in
   sieve (enumerate_2_to_n n)
 
 (* テスト：prime *)

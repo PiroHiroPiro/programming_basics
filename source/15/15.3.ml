@@ -2,7 +2,7 @@
 (* sieve : int list -> int list *)
 let rec sieve lst = match lst with
     [] -> []
-  | first :: rest -> first :: sieve (List.filter (fun n -> n mod first != 0) rest)
+  | first :: rest -> first :: sieve (List.filter (fun n -> n mod first <> 0) rest)
 
 (* テスト：sieve *)
 let test1 = sieve [2; 3; 4; 5; 6; 7; 8; 9; 10] = [2; 3; 5; 7]

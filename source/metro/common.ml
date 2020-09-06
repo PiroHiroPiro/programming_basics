@@ -7,10 +7,16 @@ type ekimei_t = {
 }
 
 (* ekimei_t 型のデータ例 *)
-let ekimei_myogadani  = {kanji="茗荷谷"; kana="みょうがだに"; romaji="myogadani"; shozoku="丸ノ内線"}
-let ekimei_ikebukuro  = {kanji="池袋";   kana="いけぶくろ";   romaji="ikebukuro"; shozoku="丸ノ内線"}
-let ekimei_tokyo      = {kanji="東京";   kana="とうきょう";   romaji="tokyo";     shozoku="山の手線"}
-let ekimei_ikebukuro2 = {kanji="池袋";   kana="いけぶくろ";   romaji="ikebukuro"; shozoku="有楽町線"}
+let ekimei_ikebukuro        = {kanji="池袋";     kana="いけぶくろ";       romaji="ikebukuro";       shozoku="丸ノ内線"}
+let ekimei_tokyo            = {kanji="東京";     kana="とうきょう";       romaji="tokyo";           shozoku="山の手線"}
+let ekimei_ikebukuro2       = {kanji="池袋";     kana="いけぶくろ";       romaji="ikebukuro";       shozoku="有楽町線"}
+let ekimei_iidabashi        = {kanji="飯田橋";   kana="いいだばし";       romaji="idabashi";        shozoku="南北線"}
+let ekimei_gokokuji         = {kanji="護国寺";   kana="ごこくじ";         romaji="gokokuji";        shozoku="有楽町線"}
+let ekimei_korakuen         = {kanji="後楽園";   kana="こうらくえん";     romaji="korakuen";        shozoku="南北線"}
+let ekimei_shinotsuka       = {kanji="新大塚";   kana="しんおおつか";     romaji="shinotsuka";      shozoku="丸ノ内線"}
+let ekimei_myogadani        = {kanji="茗荷谷";   kana="みょうがだに";     romaji="myogadani";       shozoku="丸ノ内線"}
+let ekimei_higashiikebukuro = {kanji="東池袋";   kana="ひがしいけぶくろ"; romaji="higasiikebukuro"; shozoku="有楽町線"}
+let ekimei_edogawabashi     = {kanji="江戸川橋"; kana="えどがわばし";     romaji="edogawabasi";     shozoku="有楽町線"}
 
 (* メトロネットワークの中の全ての ekimei_t 型のリスト *)
 let global_ekimei_list = [

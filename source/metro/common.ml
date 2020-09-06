@@ -7,10 +7,16 @@ type ekimei_t = {
 }
 
 (* ekimei_t 型のデータ例 *)
-let ekimei_myogadani  = {kanji="茗荷谷"; kana="みょうがだに"; romaji="myogadani"; shozoku="丸ノ内線"}
-let ekimei_ikebukuro  = {kanji="池袋";   kana="いけぶくろ";   romaji="ikebukuro"; shozoku="丸ノ内線"}
-let ekimei_tokyo      = {kanji="東京";   kana="とうきょう";   romaji="tokyo";     shozoku="山の手線"}
-let ekimei_ikebukuro2 = {kanji="池袋";   kana="いけぶくろ";   romaji="ikebukuro"; shozoku="有楽町線"}
+let ekimei_tokyo            = {kanji="東京";     kana="とうきょう";       romaji="tokyo";           shozoku="山の手線"}
+let ekimei_myogadani        = {kanji="茗荷谷";   kana="みょうがだに";     romaji="myogadani";       shozoku="丸ノ内線"}
+let ekimei_iidabashi        = {kanji="飯田橋";   kana="いいだばし";       romaji="idabashi";        shozoku="南北線"}
+let ekimei_korakuen         = {kanji="後楽園";   kana="こうらくえん";     romaji="korakuen";        shozoku="南北線"}
+let ekimei_shinotsuka       = {kanji="新大塚";   kana="しんおおつか";     romaji="shinotsuka";      shozoku="丸ノ内線"}
+let ekimei_gokokuji         = {kanji="護国寺";   kana="ごこくじ";         romaji="gokokuji";        shozoku="有楽町線"}
+let ekimei_edogawabashi     = {kanji="江戸川橋"; kana="えどがわばし";     romaji="edogawabasi";     shozoku="有楽町線"}
+let ekimei_higashiikebukuro = {kanji="東池袋";   kana="ひがしいけぶくろ"; romaji="higasiikebukuro"; shozoku="有楽町線"}
+let ekimei_ikebukuro        = {kanji="池袋";     kana="いけぶくろ";       romaji="ikebukuro";       shozoku="丸ノ内線"}
+let ekimei_ikebukuro2       = {kanji="池袋";     kana="いけぶくろ";       romaji="ikebukuro";       shozoku="有楽町線"}
 
 (* メトロネットワークの中の全ての ekimei_t 型のリスト *)
 let global_ekimei_list = [
@@ -158,18 +164,18 @@ let global_ekimei_list = [
   {kanji="高田馬場"; kana="たかだのばば"; romaji="takadanobaba"; shozoku="東西線"};
   {kanji="落合"; kana="おちあい"; romaji="ochiai"; shozoku="東西線"};
   {kanji="中野"; kana="なかの"; romaji="nakano"; shozoku="東西線"};
-  {romaji="shinkiba"; kana="しんきば"; kanji="新木場"; shozoku="有楽町線"};
-  {romaji="tatsumi"; kana="たつみ"; kanji="辰巳"; shozoku="有楽町線"};
-  {romaji="toyosu"; kana="とよす"; kanji="豊洲"; shozoku="有楽町線"};
-  {romaji="tsukishima"; kana="つきしま"; kanji="月島"; shozoku="有楽町線"};
-  {romaji="shintomityou"; kana="しんとみちょう"; kanji="新富町"; shozoku="有楽町線"};
-  {romaji="ginzaittyoume"; kana="ぎんざいっちょうめ"; kanji="銀座一丁目"; shozoku="有楽町線"};
-  {romaji="yuurakutyou"; kana="ゆうらくちょう"; kanji="有楽町"; shozoku="有楽町線"};
-  {romaji="sakuradamon"; kana="さくらだもん"; kanji="桜田門"; shozoku="有楽町線"};
-  {romaji="nagatacho"; kana="ながたちょう"; kanji="永田町"; shozoku="有楽町線"};
-  {romaji="koujimachi"; kana="こうじまち"; kanji="麹町"; shozoku="有楽町線"};
-  {romaji="ichigaya"; kana="いちがや"; kanji="市ヶ谷"; shozoku="有楽町線"};
-  {romaji="iidabashi"; kana="いいだばし"; kanji="飯田橋"; shozoku="有楽町線"};
+  {kanji="新木場"; kana="しんきば"; romaji="shinkiba"; shozoku="有楽町線"};
+  {kanji="辰巳"; kana="たつみ"; romaji="tatsumi"; shozoku="有楽町線"};
+  {kanji="豊洲"; kana="とよす"; romaji="toyosu"; shozoku="有楽町線"};
+  {kanji="月島"; kana="つきしま"; romaji="tsukishima"; shozoku="有楽町線"};
+  {kanji="新富町"; kana="しんとみちょう"; romaji="shintomityou"; shozoku="有楽町線"};
+  {kanji="銀座一丁目"; kana="ぎんざいっちょうめ"; romaji="ginzaittyoume"; shozoku="有楽町線"};
+  {kanji="有楽町"; kana="ゆうらくちょう"; romaji="yuurakutyou"; shozoku="有楽町線"};
+  {kanji="桜田門"; kana="さくらだもん"; romaji="sakuradamon"; shozoku="有楽町線"};
+  {kanji="永田町"; kana="ながたちょう"; romaji="nagatacho"; shozoku="有楽町線"};
+  {kanji="麹町"; kana="こうじまち"; romaji="koujimachi"; shozoku="有楽町線"};
+  {kanji="市ヶ谷"; kana="いちがや"; romaji="ichigaya"; shozoku="有楽町線"};
+  {kanji="飯田橋"; kana="いいだばし"; romaji="iidabashi"; shozoku="有楽町線"};
   {kanji="江戸川橋"; kana="えどがわばし"; romaji="edogawabasi"; shozoku="有楽町線"};
   {kanji="護国寺"; kana="ごこくじ"; romaji="gokokuji"; shozoku="有楽町線"};
   {kanji="東池袋"; kana="ひがしいけぶくろ"; romaji="higasiikebukuro"; shozoku="有楽町線"};

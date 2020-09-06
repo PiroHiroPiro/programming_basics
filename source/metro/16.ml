@@ -11,17 +11,23 @@ let dijkstra_main eki_lst ekikan_lst =
     | first :: rest -> kakutei_eki :: iter (saitan_no_bunri (koushin kakutei_eki mikakutei_eki_lst ekikan_lst))
   in iter (saitan_no_bunri eki_lst)
 
-(* eki_t 型のデータ例 *)
-let eki_shokika_korakuen         = {namae="後楽園";   saitan_kyori=infinity; temae_list=[]}
-let eki_shokika_iidabashi        = {namae="飯田橋";   saitan_kyori=infinity; temae_list=[]}
-let eki_shokika_shinotsuka       = {namae="新大塚";   saitan_kyori=infinity; temae_list=[]}
-let eki_shokika_ikebukuro        = {namae="池袋";     saitan_kyori=infinity; temae_list=[]}
-let eki_shokika_higashiikebukuro = {namae="東池袋";   saitan_kyori=infinity; temae_list=[]}
-let eki_shokika_gokokuji         = {namae="護国寺";   saitan_kyori=infinity; temae_list=[]}
-let eki_shokika_edogawabashi     = {namae="江戸川橋"; saitan_kyori=infinity; temae_list=[]}
-
 (* 初期化済み eki_t 型のリスト *)
-let initialized_eki_lst = make_initial_eki_list [eki_shokika_myogadani; eki_shokika_korakuen; eki_shokika_iidabashi; eki_shokika_shinotsuka; eki_shokika_ikebukuro; eki_shokika_higashiikebukuro; eki_shokika_gokokuji; eki_shokika_edogawabashi] "飯田橋"
+let initialized_eki_lst = make_initial_eki_list [ekimei_myogadani; ekimei_korakuen; ekimei_iidabashi; ekimei_shinotsuka; ekimei_ikebukuro; ekimei_higashiikebukuro; ekimei_gokokuji; ekimei_edogawabashi] "飯田橋"
 
 (* テスト：dijkstra_main *)
 let test_16_1 = dijkstra_main initialized_eki_lst global_ekikan_list
+
+(* 目的：始点と終点の駅名を受け取り、ダイクストラ法に従い最短経路を返す *)
+(* dijkstra : string -> string -> eki_t *)
+let dijkstra shiten_romaji shuten_romaji =
+  let seiretsuzumi_global_ekimei_list = seiretsu global_ekimei_list in
+  let shiten_kanji = romaji_to_kanji shiten_romaji global_ekimei_list in
+  let shuten_kanji = romaji_to_kanji shuten_romaji global_ekimei_list in
+  let initialized_eki_list = make_initial_eki_list seiretsuzumi_global_ekimei_list shiten_kanji in
+  let saitan_keiro_eki_lst = dijkstra_main initialized_eki_list global_ekikan_list in
+  match List.filter (fun eki -> eki.namae = shuten_kanji) saitan_keiro_eki_lst with
+      [] -> raise List_ga_kara
+    | first :: rest -> first
+
+(* テスト：dijkstra *)
+let test_16_2 = dijkstra "iidabashi" "myogadani" = eki_from_iidabashi_to_myogadani_1

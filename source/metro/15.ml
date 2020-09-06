@@ -12,7 +12,6 @@ let saitan_no_bunri lst =
     if saitankyori_saisho_koho_eki.saitan_kyori > eki.saitan_kyori
       then (eki, saitankyori_saisho_koho_eki :: kakuninzumi_eki_lst)
       else (saitankyori_saisho_koho_eki, eki :: kakuninzumi_eki_lst)
-
   in match lst with
       [] -> raise List_ga_kara
     | first :: rest -> List.fold_right saitan_no_bunri_1 rest (first, [])

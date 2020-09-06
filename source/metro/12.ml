@@ -12,8 +12,8 @@ let make_initial_eki_list ekimei_list kanji_ekimei =
 (* テスト：make_initial_eki_list *)
 let test_12_1 = make_initial_eki_list [eki_shokika_myogadani; eki_shokika_ikebukuro; eki_shokika_tokyo] "東京" = [
   {namae="茗荷谷"; saitan_kyori=infinity; temae_list=[]};
-  {namae="池袋"; saitan_kyori=infinity; temae_list=[]};
-  {namae="東京"; saitan_kyori=0.; temae_list=["東京"]}
+  {namae="池袋";   saitan_kyori=infinity; temae_list=[]};
+  {namae="東京";   saitan_kyori=0.;       temae_list=["東京"]}
 ]
 
 (* 目的：ekimei_t 型のリストを受け取り、ひらがなの順に並び替え重複を削除した ekimei_t 型のリストを返す *)

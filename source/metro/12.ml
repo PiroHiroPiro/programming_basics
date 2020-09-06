@@ -1,16 +1,16 @@
 #use "metro/10.ml"
 
 (* 目的：ekimei_t 型のリストと駅名を受け取り、ダイクストラ法で用いる eki_t 型のリストを作成する、また対称の駅のデータのみ初期化する *)
-(* make_initial_eki_list : ekimei_t list -> string -> eki_t list *)
-let make_initial_eki_list ekimei_list kanji_ekimei =
+(* shokika_eki_list : ekimei_t list -> string -> eki_t list *)
+let shokika_eki_list ekimei_list kanji_ekimei =
   List.map
     (fun ekimei -> if ekimei.kanji = kanji_ekimei
       then {namae=ekimei.kanji; saitan_kyori=0.      ; temae_list=[ekimei.kanji]}
       else {namae=ekimei.kanji; saitan_kyori=infinity; temae_list=[]})
     ekimei_list
 
-(* テスト：make_initial_eki_list *)
-let test_12_1 = make_initial_eki_list [ekimei_myogadani; ekimei_ikebukuro; ekimei_tokyo] "東京" = [
+(* shokika_eki_list *)
+let test_12_1 = shokika_eki_list [ekimei_myogadani; ekimei_ikebukuro; ekimei_tokyo] "東京" = [
   {namae="茗荷谷"; saitan_kyori=infinity; temae_list=[]};
   {namae="池袋";   saitan_kyori=infinity; temae_list=[]};
   {namae="東京";   saitan_kyori=0.;       temae_list=["東京"]}

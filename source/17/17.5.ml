@@ -15,7 +15,7 @@ let tree2 = Leaf (3)
 let tree3 = Node (tree1, 4, tree2)
 let tree4 = Node (tree2, 5, tree3)
 
-(* 目的：tree に含まれる整数を二倍にした木を返す *)
+(* 目的：tree に含まれる値を二倍にした木を返す *)
 (* tree_double : tree_t -> tree_t *)
 let rec tree_double tree = match tree with
     Empty -> Empty

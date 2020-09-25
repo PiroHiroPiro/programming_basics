@@ -22,7 +22,7 @@ let rec tree_double tree = match tree with
   | Leaf (n) -> Leaf (n * 2)
   | Node (t1, n, t2) -> Node (tree_double t1, n * 2, tree_double t2)
 
-(* tree_double *)
+(* テスト：tree_double *)
 let test1 = tree_double tree1 = tree1
 let test2 = tree_double tree2 = Leaf (6)
 let test3 = tree_double tree3 = Node (tree1, 8, Leaf (6))

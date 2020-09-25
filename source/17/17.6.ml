@@ -22,7 +22,6 @@ let rec tree_map f tree = match tree with
   | Leaf (n) -> Leaf (f n)
   | Node (t1, n, t2) -> Node (tree_map f t1, f n, tree_map f t2)
 
-
 (* テスト：tree_map *)
 let test1 = tree_map (fun n -> n * n) tree2 = Leaf (9)
 let test2 = tree_map (fun n -> n * n) tree4 = Node (Leaf (9), 25, Node (tree1, 16, Leaf (9)))

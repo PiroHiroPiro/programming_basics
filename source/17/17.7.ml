@@ -16,7 +16,7 @@ let tree3 = Node (tree1, 4, tree2)
 let tree4 = Node (tree2, 5, tree3)
 
 (* 目的：tree を受け取り，tree に含まれる節と葉の数を返す *)
-(* tree_length : (int -> int) -> tree_t -> tree_t *)
+(* tree_length : tree_t -> int *)
 let rec tree_length tree = match tree with
     Empty -> 0
   | Leaf (n) -> 1

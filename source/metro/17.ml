@@ -34,6 +34,8 @@ let rec inserts_ekikan tree lst = match lst with
     [] -> tree
   | first :: rest -> inserts_ekikan (insert_ekikan tree first) rest
 
+(* let inserts_ekikan tree lst = List.fold_right insert_ekikan lst tree *)
+
 (* テストデータ *)
 let ekikan_lst = [
   {kiten="池袋"; shuten="新大塚"; keiyu="丸ノ内線"; kyori=1.8; jikan=3};

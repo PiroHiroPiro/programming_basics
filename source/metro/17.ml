@@ -28,7 +28,7 @@ let insert_ekikan tree ekikan =
 (* テスト：insert_ekikan *)
 let test_17_3 = insert_ekikan ekikan_tree_1 {kiten="茗荷谷"; shuten="後楽園"; keiyu="丸ノ内線"; kyori=1.8; jikan=2} = ekikan_tree_2
 
-(* 目的：ekikan_tree_t 型の木と ekikan_t 型のリストを受け取り、リスト内のデータを木に挿入して返す *)
+(* 目的：ekikan_tree_t 型のと ekikan_t 型のリストを受け取り、リスト内のデータを木に挿入して返す *)
 (* inserts_ekikan : ekikan_tree_t -> ekikan list -> ekikan_tree_t *)
 let rec inserts_ekikan tree lst = match lst with
     [] -> tree
@@ -47,3 +47,26 @@ let ekikan_lst = [
 
 (* テスト：inserts_ekikan *)
 let test_17_4 = inserts_ekikan ekikan_tree_1 ekikan_lst = ekikan_tree_3
+
+(* 目的：ekikan_tree_t 型と駅名を受け取り、駅名のデータを返す *)
+(* ekikan_search : ekikan_tree_t -> string -> (string * float) lst *)
+let rec ekikan_search tree target_ekimei = match tree with
+    Empty -> []
+  | Node (left_t, n, right_t) -> match n with (ekimei, lst) ->
+    if ekimei = target_ekimei then lst
+    else if ekimei > target_ekimei then ekikan_search left_t target_ekimei
+    else ekikan_search right_t target_ekimei
+
+(* テスト：ekikan_search *)
+let test_17_5 = ekikan_search ekikan_tree_1 "茗荷谷" = []
+let test_17_6 = ekikan_search ekikan_tree_3 "茗荷谷" = [("後楽園", 1.8); ("新大塚", 1.2)]
+
+(* 目的：二つの駅名と ekikan_tree_t 型を受け取り、距離を返す *)
+(* get_ekikan_kyori : string -> string -> ekikan_tree_t -> float *)
+let get_ekikan_kyori eki1 eki2 ekikan_tree = let kyori_lst = ekikan_search ekikan_tree eki1 in
+  assoc eki2 kyori_lst
+
+let global_ekikan_tree = inserts_ekikan Empty global_ekikan_list
+
+(* テスト：get_ekikan_kyori *)
+let test_17_7 = get_ekikan_kyori "茗荷谷" "新大塚" global_ekikan_tree = 1.2

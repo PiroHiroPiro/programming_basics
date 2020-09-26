@@ -381,6 +381,23 @@ let eki_from_tokyo_to_otemachi        = {namae="大手町"; saitan_kyori=0.6; te
 let eki_from_iidabashi_to_shinotsuka  = {namae="新大塚"; saitan_kyori=7.8; temae_list=["新大塚"; "池袋"; "東池袋"; "護国寺"; "江戸川橋"; "飯田橋"]}
 let eki_from_iidabashi_to_korakuen    = {namae="後楽園"; saitan_kyori=1.4; temae_list=["後楽園"; "飯田橋"]}
 
-(* 木を表す型 *)
+(* 駅間の情報の木を表す型 *)
 type ekikan_tree_t = Empty                                                                    (* 空の木 *)
                    | Node of ekikan_tree_t * (string * (string * float) list) * ekikan_tree_t (* 節 *)
+
+(* ekikan_tree_t は
+  - Empty            空の木、あるいは
+  - Node (t1, (ekimei, [(ekimei, kyori)]), t2) 左の木が t1、値が n、右の木が t2 であるような節（t1 と t2 が自己参照のケース）
+  という形 *)
+
+(* eki_t 型のデータ例 *)
+let ekikan_tree_1 = Empty
+let ekikan_tree_2 = Node (
+                      Node (
+                        Empty,
+                        ("後楽園", [("茗荷谷", 1.8)]),
+                        Empty
+                      ),
+                      ("茗荷谷", [("後楽園", 1.8)]),
+                      Empty
+                    )

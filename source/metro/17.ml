@@ -27,3 +27,21 @@ let insert_ekikan tree ekikan =
 
 (* テスト：insert_ekikan *)
 let test_17_3 = insert_ekikan ekikan_tree_1 {kiten="茗荷谷"; shuten="後楽園"; keiyu="丸ノ内線"; kyori=1.8; jikan=2} = ekikan_tree_2
+
+(* 目的：ekikan_tree_t 型の木と ekikan_t 型のリストを受け取り、リスト内のデータを木に挿入して返す *)
+(* inserts_ekikan : ekikan_tree_t -> ekikan list -> ekikan_tree_t *)
+let rec inserts_ekikan tree lst = match lst with
+    [] -> tree
+  | first :: rest -> inserts_ekikan (insert_ekikan tree first) rest
+
+(* テストデータ *)
+let ekikan_lst = [
+  {kiten="池袋"; shuten="新大塚"; keiyu="丸ノ内線"; kyori=1.8; jikan=3};
+  {kiten="新大塚"; shuten="茗荷谷"; keiyu="丸ノ内線"; kyori=1.2; jikan=2};
+  {kiten="茗荷谷"; shuten="後楽園"; keiyu="丸ノ内線"; kyori=1.8; jikan=2};
+  {kiten="飯田橋"; shuten="後楽園"; keiyu="南北線"; kyori=1.4 ; jikan=2};
+  {kiten="後楽園"; shuten="東大前"; keiyu="南北線"; kyori=1.3 ; jikan=3};
+]
+
+(* テスト：inserts_ekikan *)
+let test_17_4 = inserts_ekikan ekikan_tree_1 ekikan_lst = ekikan_tree_3

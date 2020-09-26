@@ -134,3 +134,44 @@ let dijkstra shiten_romaji shuten_romaji =
 
 (* テスト：dijkstra *)
 let test_17_10 = dijkstra "iidabashi" "myogadani" = eki_from_iidabashi_to_myogadani_1
+
+(* 目的：更新済みの eki_t 型のリストを分割して受け取り、最短距離最小の eki_t と最短距離最小の eki_t 以外からなるリストの組を返す *)
+(* saitan_no_bunri : eki_t -> eki_t list -> eki_t * eki_t list *)
+let saitan_no_bunri saisho_no_eki lst =
+  (* 目的：最短距離最小候補の eki_t と最短距離が最小ではなかった eki_t のリストと未確認の eki_t のリストを受け取り、最短距離最小の eki_t と最短距離最小の eki_t 以外からなるリストの組を返す *)
+  (* saitan_no_bunri_iter : eki_t -> eki_t list -> eki_t list -> eki_t * eki_t list *)
+  let saitan_no_bunri_1 eki current_state = match current_state with (saitankyori_saisho_koho_eki, kakuninzumi_eki_lst) ->
+    if saitankyori_saisho_koho_eki.saitan_kyori > eki.saitan_kyori
+      then (eki, saitankyori_saisho_koho_eki :: kakuninzumi_eki_lst)
+      else (saitankyori_saisho_koho_eki, eki :: kakuninzumi_eki_lst)
+  in List.fold_right saitan_no_bunri_1 lst (saisho_no_eki, [])
+
+(* テスト：saitan_no_bunri *)
+let test_17_11 = saitan_no_bunri eki_from_iidabashi_to_korakuen [eki_from_iidabashi_to_myogadani_2; eki_from_tokyo_to_otemachi] = (eki_from_tokyo_to_otemachi, [eki_from_iidabashi_to_myogadani_2; eki_from_iidabashi_to_korakuen])
+let test_17_12 = saitan_no_bunri eki_from_iidabashi_to_korakuen [] = (eki_from_iidabashi_to_korakuen, [])
+
+(* 目的：未確定の eki_t 型のリストと ekikan_tree_t 型を受け取り、ダイクストラ法に従って各駅の最短距離と最短経路が入った eki_t 型のリストを返す *)
+(* dijkstra_main : eki_t list -> ekikan_tree_t -> eki_t list *)
+let rec dijkstra_main eki_lst ekikan_tree = match eki_lst with
+    [] -> []
+  | first :: rest -> let (kakutei_eki, mikakutei_eki_lst) = saitan_no_bunri first rest in
+    kakutei_eki :: dijkstra_main (koushin kakutei_eki mikakutei_eki_lst ekikan_tree) ekikan_tree
+
+(* 初期化済み eki_t 型のリスト *)
+let shokikazumi_eki_lst = shokika_eki_list [ekimei_myogadani; ekimei_korakuen; ekimei_iidabashi; ekimei_shinotsuka; ekimei_ikebukuro; ekimei_higashiikebukuro; ekimei_gokokuji; ekimei_edogawabashi] "飯田橋"
+
+(* テスト：dijkstra_main *)
+let test_17_13 = dijkstra_main shokikazumi_eki_lst global_ekikan_tree =
+  [
+    {namae = "飯田橋";   saitan_kyori = 0.;                  temae_list = ["飯田橋"]};
+    {namae = "後楽園";   saitan_kyori = 1.4;                 temae_list = ["後楽園"; "飯田橋"]};
+    {namae = "江戸川橋"; saitan_kyori = 1.6;                 temae_list = ["江戸川橋"; "飯田橋"]};
+    {namae = "護国寺";   saitan_kyori = 2.90000000000000036; temae_list = ["護国寺"; "江戸川橋"; "飯田橋"]};
+    {namae = "茗荷谷";   saitan_kyori = 3.2;                 temae_list = ["茗荷谷"; "後楽園"; "飯田橋"]};
+    {namae = "東池袋";   saitan_kyori = 4.;                  temae_list = ["東池袋"; "護国寺"; "江戸川橋"; "飯田橋"]};
+    {namae = "新大塚";   saitan_kyori = 4.4;                 temae_list = ["新大塚"; "茗荷谷"; "後楽園"; "飯田橋"]};
+    {namae = "池袋";     saitan_kyori = 6.;                  temae_list = ["池袋"; "東池袋"; "護国寺"; "江戸川橋"; "飯田橋"]}
+  ]
+
+(* テスト：dijkstra *)
+let test_17_14 = dijkstra "iidabashi" "myogadani" = eki_from_iidabashi_to_myogadani_1

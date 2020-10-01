@@ -15,9 +15,9 @@ let person_A2 = {name="とおる"; height=1.85; weight=69.3; birthday="1995/01/0
 let rec first_A lst = match lst with
     [] -> None
   | first :: rest ->
-      if first.bloodtype = "A" then Some (first)
+      if first.bloodtype = "A" then Some first
                                else first_A rest
 
 (* テスト：first_A *)
-let test1 = first_A [person_O; person_A2; person_A1] = Some (person_A2)
+let test1 = first_A [person_O; person_A2; person_A1] = Some person_A2
 let test2 = first_A [person_O; person_O] = None

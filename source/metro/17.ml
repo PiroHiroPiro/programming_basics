@@ -52,10 +52,10 @@ let test_17_4 = inserts_ekikan ekikan_tree_1 ekikan_lst = ekikan_tree_3
 (* ekikan_search : ekikan_tree_t -> string -> (string * float) lst *)
 let rec ekikan_search tree target_ekimei = match tree with
     Empty -> []
-  | Node (left_t, n, right_t) -> match n with (ekimei, lst) ->
-    if ekimei = target_ekimei then lst
-    else if ekimei > target_ekimei then ekikan_search left_t target_ekimei
-    else ekikan_search right_t target_ekimei
+  | Node (left_t, (ekimei, lst), right_t) ->
+      if ekimei = target_ekimei then lst
+      else if ekimei > target_ekimei then ekikan_search left_t target_ekimei
+      else ekikan_search right_t target_ekimei
 
 (* テスト：ekikan_search *)
 let test_17_5 = ekikan_search ekikan_tree_1 "茗荷谷" = []

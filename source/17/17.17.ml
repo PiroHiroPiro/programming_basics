@@ -10,5 +10,5 @@ let rec minimum min lst = match lst with
 (* テスト：minimum *)
 let test1 = minimum 3 [] = 3
 let test1 = minimum 1 [2] = 1
-let test1 = minimum 3 [2] = 2
+let test1 = minimum 3 [5] = 3
 let test1 = minimum 3 [2; 6; 4; 1; 8] = 1
